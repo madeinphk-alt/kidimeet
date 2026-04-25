@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand: #534AB7;
+  --brand-light: #EEEDFE;
+  --brand-dark: #3C3489;
+  --bg-app: #f5f4fb;
+}
+
+html {
+  direction: rtl;
+}
+
+body {
+  background-color: var(--bg-app);
+  font-family: 'Rubik', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c0bce0; border-radius: 2px; }

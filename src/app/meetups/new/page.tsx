@@ -114,7 +114,7 @@ function NewMeetupForm() {
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#f7f6fb]">
+    <div className="flex flex-col h-[100dvh] overflow-hidden bg-[#f7f6fb]">
       {/* Header */}
       <header className="bg-[#534AB7] px-4 py-4">
         <h1 className="text-white text-[17px] font-medium text-center">

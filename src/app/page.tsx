@@ -216,7 +216,7 @@ export default function LuzPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#f7f6fb] overflow-hidden">
+    <div className="flex flex-col h-[100dvh] bg-[#f7f6fb] overflow-hidden">
       <header className="bg-[#534AB7] px-4 py-3 flex items-center justify-between">
         <Link
           href="/meetups/new"

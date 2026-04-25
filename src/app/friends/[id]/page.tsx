@@ -39,7 +39,7 @@ function FriendProfile() {
     .join(', ');
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#f7f6fb]">
+    <div className="flex flex-col h-[100dvh] overflow-hidden bg-[#f7f6fb]">
       {/* Header */}
       <header className="bg-[#534AB7] px-4 py-3 flex items-center justify-between">
         <button onClick={() => router.back()} className="text-white/80 text-xl w-8">‹</button>

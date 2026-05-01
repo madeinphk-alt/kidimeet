@@ -225,7 +225,7 @@ function AddFriendForm() {
               <input
                 value={childLastName}
                 onChange={e => setChildLastName(e.target.value)}
-                placeholder="משפחה"
+                placeholder="משפחה / כינוי"
                 className="w-0 flex-1 border border-gray-200 rounded-xl px-3 py-3 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white min-w-0"
                 dir="rtl"
               />

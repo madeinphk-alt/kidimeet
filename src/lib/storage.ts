@@ -331,6 +331,61 @@ export function deleteEvent(id: string): void {
   localStorage.setItem(EVENTS_KEY, JSON.stringify(events));
 }
 
+// ─── Message Templates ───────────────────────────────────────────────────────
+
+export interface MessageTemplates {
+  initial:  string;   // פנייה ראשונית
+  propose1: string;   // הצעת מפגש נוסח #1
+  propose2: string;   // הצעת מפגש נוסח #2
+}
+
+// Variables: {שם_הורה} {שם_שלי} {הילד_שלי} {שם_חבר} {תפקיד}
+export const DEFAULT_MSG_TEMPLATES: MessageTemplates = {
+  initial: `היי {שם_הורה} 👋 זה {שם_שלי} {תפקיד} של {הילד_שלי}
+הייתי שמח לעזור לילדים להיפגש לשחק ואשמח אם תגיד לי באלו ימים {שם_חבר} יהיה פנוי לפגוש את {הילד_שלי} 😊
+
+אני עובד עם KidiMeet ואשמח להכניס את {שם_חבר} ללוז מפגשים
+אתה מוזמן גם לנסות 👉 www.KidiMeet.co.il`,
+
+  propose1: `היי {שם_הורה} 👋 זה {שם_שלי} {תפקיד} של {הילד_שלי}
+חשבנו לקבוע פליידייט ל{שם_חבר} ו{הילד_שלי} 😊
+מתי יהיה נוח לכם? 🙂
+
+KidiMeet · www.KidiMeet.co.il`,
+
+  propose2: `היי {שם_הורה} 😊
+{שם_שלי} כאן — {תפקיד} של {הילד_שלי}
+רציתי לתאם פגישה לילדים — {שם_חבר} ו{הילד_שלי}
+אפשר לדבר?`,
+};
+
+const MSG_TEMPLATES_KEY = 'kidimeet_msg_templates';
+
+export function getMsgTemplates(): MessageTemplates {
+  if (typeof window === 'undefined') return { ...DEFAULT_MSG_TEMPLATES };
+  try {
+    const raw = localStorage.getItem(MSG_TEMPLATES_KEY);
+    if (!raw) return { ...DEFAULT_MSG_TEMPLATES };
+    return { ...DEFAULT_MSG_TEMPLATES, ...JSON.parse(raw) };
+  } catch { return { ...DEFAULT_MSG_TEMPLATES }; }
+}
+
+export function saveMsgTemplates(t: MessageTemplates): void {
+  localStorage.setItem(MSG_TEMPLATES_KEY, JSON.stringify(t));
+}
+
+export function applyMsgTemplate(
+  template: string,
+  vars: { parentFirst: string; myName: string; myChild: string; friendName: string; role: string }
+): string {
+  return template
+    .replace(/\{שם_הורה\}/g,   vars.parentFirst)
+    .replace(/\{שם_שלי\}/g,    vars.myName)
+    .replace(/\{הילד_שלי\}/g,  vars.myChild)
+    .replace(/\{שם_חבר\}/g,    vars.friendName)
+    .replace(/\{תפקיד\}/g,     vars.role);
+}
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 // Generate initials from a Hebrew name: "יהלי ברק" → "יב"

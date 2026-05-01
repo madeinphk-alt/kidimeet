@@ -4,8 +4,9 @@ import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import {
   getProfile, saveProfile, getActiveChild, switchActiveChild, DEFAULT_DAY_SLOT,
+  getMsgTemplates, saveMsgTemplates, DEFAULT_MSG_TEMPLATES,
 } from '@/lib/storage';
-import type { UserProfile, ChildProfile, DaySlot } from '@/lib/storage';
+import type { UserProfile, ChildProfile, DaySlot, MessageTemplates } from '@/lib/storage';
 import { AVATAR_COLORS, HEB_DAYS_SINGLE } from '@/lib/utils';
 import DayAvailPicker from '@/components/DayAvailPicker';
 import BottomNav from '@/components/BottomNav';
@@ -23,6 +24,8 @@ export default function ProfilePage() {
     return r;
   });
   const [saved, setSaved] = useState(false);
+  const [templates, setTemplates] = useState<MessageTemplates>({ ...DEFAULT_MSG_TEMPLATES });
+  const [tplSaved, setTplSaved] = useState(false);
 
   // Load profile once
   useEffect(() => {
@@ -32,6 +35,7 @@ export default function ProfilePage() {
     const child = getActiveChild(p);
     setEditChildId(child.id);
     setAvail(child.availability ?? {});
+    setTemplates(getMsgTemplates());
   }, [router]);
 
   // When editChildId changes, load that child's availability (and flush prev changes first)
@@ -220,6 +224,57 @@ export default function ProfilePage() {
                 ערוך
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* ── Message Templates ────────────────────────────────────────────── */}
+        <div className="mb-3">
+          <div className="flex items-center justify-between mb-2">
+            <button
+              onClick={() => {
+                saveMsgTemplates(templates);
+                setTplSaved(true);
+                setTimeout(() => setTplSaved(false), 2000);
+              }}
+              className={clsx(
+                'text-[12px] rounded-full px-3 py-1 transition-colors',
+                tplSaved ? 'bg-green-500 text-white' : 'bg-[#534AB7] text-white'
+              )}
+            >
+              {tplSaved ? '✓ נשמר' : 'שמור'}
+            </button>
+            <p className="text-[11px] font-medium text-gray-400 text-right">ערכיית הודעות</p>
+          </div>
+
+          <p className="text-[10px] text-gray-400 text-right mb-2 px-1">
+            משתנים: <span className="font-mono">{'{שם_הורה}'} {'{שם_שלי}'} {'{הילד_שלי}'} {'{שם_חבר}'} {'{תפקיד}'}</span>
+          </p>
+
+          <div className="flex flex-col gap-3">
+            {([
+              { key: 'initial',  label: 'פנייה ראשונית' },
+              { key: 'propose1', label: 'הצעת מפגש נוסח #1' },
+              { key: 'propose2', label: 'הצעת מפגש נוסח #2' },
+            ] as { key: keyof MessageTemplates; label: string }[]).map(({ key, label }) => (
+              <div key={key} className="bg-white rounded-xl border border-[#e0ddf0] px-3 py-2.5" dir="rtl">
+                <div className="flex items-center justify-between mb-1.5">
+                  <button
+                    onClick={() => setTemplates(t => ({ ...t, [key]: DEFAULT_MSG_TEMPLATES[key] }))}
+                    className="text-[10px] text-gray-400 underline"
+                  >
+                    איפוס
+                  </button>
+                  <p className="text-[12px] font-semibold text-gray-700">{label}</p>
+                </div>
+                <textarea
+                  value={templates[key]}
+                  onChange={e => setTemplates(t => ({ ...t, [key]: e.target.value }))}
+                  rows={5}
+                  className="w-full text-[12px] text-gray-800 bg-[#faf9ff] rounded-lg border border-[#e8e5f5] px-2.5 py-2 resize-none focus:outline-none focus:border-[#534AB7]"
+                  dir="rtl"
+                />
+              </div>
+            ))}
           </div>
         </div>
 

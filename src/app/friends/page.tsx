@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import { differenceInDays } from 'date-fns';
-import { getFriends, getProfile, getActiveChild, getPlannedMeetups } from '@/lib/storage';
+import { getFriends, getProfile, getActiveChild, getPlannedMeetups, getMsgTemplates, applyMsgTemplate } from '@/lib/storage';
 import type { Friend, UserProfile } from '@/lib/storage';
 import BottomNav from '@/components/BottomNav';
 import ChildSwitcher from '@/components/ChildSwitcher';
@@ -72,31 +72,27 @@ export default function FriendsPage() {
 
   const buildAvailMsg = (friend: Friend, parent: { name: string; phone: string }): string => {
     if (!profile) return '';
-    const myName  = profile.parent.name;
-    const myChild = getActiveChild(profile).name;
-    const role    = profile.parent.role === 'mom' ? 'אמא' : 'אבא';
-    const pFirst  = parent.name.split(' ')[0];
-    return (
-      `היי ${pFirst} 👋 זה ${myName} ${role} של ${myChild}\n` +
-      `הייתי שמח לעזור לילדים להיפגש לשחק ואשמח אם תגיד לי באלו ימים ${friend.name} יהיה פנוי לפגוש את ${myChild} 😊\n\n` +
-      `אני עובד עם KidiMeet ואשמח להכניס את ${friend.name} ללוז מפגשים\n` +
-      `אתה מוזמן גם לנסות 👉 www.KidiMeet.co.il`
-    );
+    const vars = {
+      parentFirst: parent.name.split(' ')[0],
+      myName:      profile.parent.name,
+      myChild:     getActiveChild(profile).name,
+      friendName:  friend.name.split(' ')[0],
+      role:        profile.parent.role === 'mom' ? 'אמא' : 'אבא',
+    };
+    return applyMsgTemplate(getMsgTemplates().initial, vars);
   };
 
-  const buildProposeMsg = (friend: Friend, parent: { name: string; phone: string }): string => {
+  const buildProposeMsg = (friend: Friend, parent: { name: string; phone: string }, variant: 1 | 2 = 1): string => {
     if (!profile) return '';
-    const myName  = profile.parent.name;
-    const myChild = getActiveChild(profile).name;
-    const role    = profile.parent.role === 'mom' ? 'אמא' : 'אבא';
-    const pFirst  = parent.name.split(' ')[0];
-    const fFirst  = friend.name.split(' ')[0];
-    return (
-      `היי ${pFirst} 👋 זה ${myName} ${role} של ${myChild}\n` +
-      `חשבנו לקבוע פלייידייט ל${fFirst} ו${myChild} 😊\n` +
-      `מתי יהיה נוח לכם? 🙂\n\n` +
-      `KidiMeet · www.KidiMeet.co.il`
-    );
+    const vars = {
+      parentFirst: parent.name.split(' ')[0],
+      myName:      profile.parent.name,
+      myChild:     getActiveChild(profile).name,
+      friendName:  friend.name.split(' ')[0],
+      role:        profile.parent.role === 'mom' ? 'אמא' : 'אבא',
+    };
+    const tpl = variant === 2 ? getMsgTemplates().propose2 : getMsgTemplates().propose1;
+    return applyMsgTemplate(tpl, vars);
   };
 
   return (
@@ -176,9 +172,16 @@ export default function FriendsPage() {
                     {/* הצע פליידייט לכל הורה */}
                     {profile && friend.parents.filter(p => p.phone).map((p, i) => (
                       <button key={i}
-                        onClick={() => openWa(p.phone, buildProposeMsg(friend, p))}
+                        onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 1))}
                         className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#25D366] text-white text-[11px] font-medium">
-                        <WaIcon />הצע ל{p.name.split(' ')[0]}
+                        <WaIcon />הצע #1
+                      </button>
+                    ))}
+                    {profile && friend.parents.filter(p => p.phone).map((p, i) => (
+                      <button key={`p2-${i}`}
+                        onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 2))}
+                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#1aab55] text-white text-[11px] font-medium">
+                        <WaIcon />הצע #2
                       </button>
                     ))}
 

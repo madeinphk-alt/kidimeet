@@ -130,7 +130,7 @@ export default function EditParentPage() {
 
           <div>
             <label className="block text-[12px] font-medium text-gray-500 mb-1.5">
-              תיאור נוסף <span className="font-normal opacity-60">(אופציונלי)</span>
+              תיאור נוסף <span className="font-normal opacity-60">(קומה, קוד, מספר דלת ומה שיעזור למצוא בקלות)</span>
             </label>
             <input
               value={buildingDetails}

@@ -51,7 +51,8 @@ function AddFriendForm() {
   const editId = params.get('id');
 
   const [step, setStep] = useState(0);
-  const [childName, setChildName] = useState('');
+  const [childFirstName, setChildFirstName] = useState('');
+  const [childLastName,  setChildLastName]  = useState('');
   const [group, setGroup] = useState<FriendGroup>('class');
   const [groupLabel, setGroupLabel] = useState('');
   const [friendSchool, setFriendSchool] = useState('');
@@ -74,7 +75,9 @@ function AddFriendForm() {
     if (editId) {
       const f = getFriends().find(fr => fr.id === editId);
       if (f) {
-        setChildName(f.name);
+        const parts = f.name.trim().split(' ');
+        setChildFirstName(parts[0] ?? '');
+        setChildLastName(parts.slice(1).join(' ') ?? '');
         setGroup(f.group ?? 'class');
         setGroupLabel(f.groupLabel ?? '');
         setFriendSchool(f.school ?? '');
@@ -126,8 +129,10 @@ function AddFriendForm() {
   };
 
   // ── Validation ──────────────────────────────────────────────────────────
+  const childName = [childFirstName.trim(), childLastName.trim()].filter(Boolean).join(' ');
+
   const canNext = [
-    childName.trim().length > 0,
+    childFirstName.trim().length > 0,
     parents[0].name.trim().length > 0 && parents[0].phone.trim().length > 0 &&
       (!splitCustody || (parents[1].name.trim().length > 0 && parents[1].phone.trim().length > 0)),
     true, // availability: always ok — can save pending or fill now
@@ -164,7 +169,7 @@ function AddFriendForm() {
   // ── Send WA + save as pending ───────────────────────────────────────────
   const sendAndWait = (parent: typeof parents[0]) => {
     if (!profile) return;
-    const msg = buildAvailabilityWaMessage(profile, childName, parent);
+    const msg = buildAvailabilityWaMessage(profile, childFirstName.trim(), parent);
     window.open(`https://wa.me/${formatWaPhone(parent.phone)}?text=${encodeURIComponent(msg)}`, '_blank');
     saveFriend(buildFriend(true));
     router.push('/friends');
@@ -208,14 +213,23 @@ function AddFriendForm() {
             <p className="text-[13px] text-gray-400 mb-5">שם מלא או כינוי + מאיפה מכירים</p>
 
             <label className="block text-[12px] font-medium text-gray-500 mb-1.5">שם הילד</label>
-            <input
-              value={childName}
-              onChange={e => setChildName(e.target.value)}
-              placeholder="לדוגמא: עמית לוי"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-[15px] text-right mb-5 focus:outline-none focus:border-[#534AB7] bg-white"
-              dir="rtl"
-              autoFocus
-            />
+            <div className="flex gap-2 mb-5">
+              <input
+                value={childLastName}
+                onChange={e => setChildLastName(e.target.value)}
+                placeholder="משפחה"
+                className="flex-1 border border-gray-200 rounded-xl px-3 py-3 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white"
+                dir="rtl"
+              />
+              <input
+                value={childFirstName}
+                onChange={e => setChildFirstName(e.target.value)}
+                placeholder="שם פרטי"
+                className="flex-1 border border-gray-200 rounded-xl px-3 py-3 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white"
+                dir="rtl"
+                autoFocus
+              />
+            </div>
 
             <label className="block text-[12px] font-medium text-gray-500 mb-2">מאיפה מכירים?</label>
             <div className="flex flex-wrap gap-2 mb-3" dir="rtl">
@@ -446,7 +460,7 @@ function AddFriendForm() {
                     </svg>
                     <div className="flex-1 min-w-0">
                       <p className="text-[14px] font-bold leading-snug">
-                        שאל את {p.name.split(' ')[0]} מתי {childName} פנוי
+                        שאל את {p.name.split(' ')[0]} מתי {childFirstName} פנוי
                       </p>
                       <p className="text-[11px] text-white/80 mt-0.5">
                         שמור וחכה לתשובה

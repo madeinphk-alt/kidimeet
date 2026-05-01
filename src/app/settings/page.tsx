@@ -218,7 +218,7 @@ export default function ProfilePage() {
                 )}
               </div>
               <button
-                onClick={() => router.push('/onboarding?edit=1')}
+                onClick={() => router.push('/settings/parent')}
                 className="text-[11px] text-gray-400 bg-gray-100 rounded-lg px-3 py-1.5"
               >
                 ערוך

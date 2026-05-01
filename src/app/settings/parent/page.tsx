@@ -7,11 +7,13 @@ import { getProfile, saveProfile } from '@/lib/storage';
 export default function EditParentPage() {
   const router = useRouter();
 
-  const [firstName,   setFirstName]   = useState('');
-  const [lastName,    setLastName]    = useState('');
-  const [phone,       setPhone]       = useState('');
-  const [role,        setRole]        = useState<'mom' | 'dad'>('mom');
-  const [saved,       setSaved]       = useState(false);
+  const [firstName,       setFirstName]       = useState('');
+  const [lastName,        setLastName]        = useState('');
+  const [phone,           setPhone]           = useState('');
+  const [role,            setRole]            = useState<'mom' | 'dad'>('mom');
+  const [address,         setAddress]         = useState('');
+  const [buildingDetails, setBuildingDetails] = useState('');
+  const [saved,           setSaved]           = useState(false);
 
   useEffect(() => {
     const p = getProfile();
@@ -21,6 +23,8 @@ export default function EditParentPage() {
     setLastName(parts.slice(1).join(' ') ?? '');
     setPhone(p.parent.phone);
     setRole(p.parent.role);
+    setAddress(p.parent.address ?? '');
+    setBuildingDetails(p.parent.buildingDetails ?? '');
   }, [router]);
 
   const canSave = firstName.trim() && phone.trim();
@@ -31,7 +35,7 @@ export default function EditParentPage() {
     const fullName = [firstName.trim(), lastName.trim()].filter(Boolean).join(' ');
     saveProfile({
       ...p,
-      parent: { ...p.parent, name: fullName, phone: phone.trim(), role },
+      parent: { ...p.parent, name: fullName, phone: phone.trim(), role, address: address.trim(), buildingDetails: buildingDetails.trim() },
     });
     setSaved(true);
     setTimeout(() => router.back(), 800);
@@ -106,7 +110,39 @@ export default function EditParentPage() {
               ))}
             </div>
           </div>
+
         </div>
+
+        {/* כתובת */}
+        <div className="bg-white rounded-xl border border-[#e0ddf0] px-4 py-4 flex flex-col gap-4 mt-3" dir="rtl">
+          <p className="text-[11px] font-medium text-gray-400">כתובת</p>
+
+          <div>
+            <label className="block text-[12px] font-medium text-gray-500 mb-1.5">רחוב ומספר בית</label>
+            <input
+              value={address}
+              onChange={e => setAddress(e.target.value)}
+              placeholder="לדוגמא: רחוב הורד 12, רמות"
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-[#fafafa]"
+              dir="rtl"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[12px] font-medium text-gray-500 mb-1.5">
+              תיאור נוסף <span className="font-normal opacity-60">(אופציונלי)</span>
+            </label>
+            <input
+              value={buildingDetails}
+              onChange={e => setBuildingDetails(e.target.value)}
+              placeholder="קומה 2, קוד כניסה 1234, דלת ימין"
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-[#fafafa]"
+              dir="rtl"
+            />
+            <p className="text-[11px] text-gray-400 mt-1.5">יישלח להורים רק כשמפגש אצלך מאושר</p>
+          </div>
+        </div>
+
       </main>
 
       {/* Save button */}

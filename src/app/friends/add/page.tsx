@@ -215,19 +215,19 @@ function AddFriendForm() {
             <label className="block text-[12px] font-medium text-gray-500 mb-1.5">שם הילד</label>
             <div className="flex gap-2 mb-5 w-full max-w-sm mx-auto">
               <input
-                value={childLastName}
-                onChange={e => setChildLastName(e.target.value)}
-                placeholder="משפחה"
-                className="w-0 flex-1 border border-gray-200 rounded-xl px-3 py-3 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white min-w-0"
-                dir="rtl"
-              />
-              <input
                 value={childFirstName}
                 onChange={e => setChildFirstName(e.target.value)}
                 placeholder="שם פרטי"
                 className="w-0 flex-1 border border-gray-200 rounded-xl px-3 py-3 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white min-w-0"
                 dir="rtl"
                 autoFocus
+              />
+              <input
+                value={childLastName}
+                onChange={e => setChildLastName(e.target.value)}
+                placeholder="משפחה"
+                className="w-0 flex-1 border border-gray-200 rounded-xl px-3 py-3 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white min-w-0"
+                dir="rtl"
               />
             </div>
 

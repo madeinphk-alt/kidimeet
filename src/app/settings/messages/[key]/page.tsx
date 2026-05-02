@@ -78,6 +78,16 @@ function EditMessageForm() {
 
       <main className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
 
+        {/* Textarea */}
+        <textarea
+          ref={textareaRef}
+          value={text}
+          onChange={e => { setText(e.target.value); setSaved(false); }}
+          rows={12}
+          className="w-full text-[14px] text-gray-800 bg-white rounded-xl border border-[#e0ddf0] px-4 py-3 resize-none focus:outline-none focus:border-[#534AB7] leading-relaxed"
+          dir="rtl"
+        />
+
         {/* Variable buttons */}
         <div dir="rtl">
           <p className="text-[11px] text-gray-400 mb-2">הוסף משתנה לתוך ההודעה:</p>
@@ -93,16 +103,6 @@ function EditMessageForm() {
             ))}
           </div>
         </div>
-
-        {/* Textarea */}
-        <textarea
-          ref={textareaRef}
-          value={text}
-          onChange={e => { setText(e.target.value); setSaved(false); }}
-          rows={12}
-          className="w-full text-[14px] text-gray-800 bg-white rounded-xl border border-[#e0ddf0] px-4 py-3 resize-none focus:outline-none focus:border-[#534AB7] leading-relaxed"
-          dir="rtl"
-        />
 
         {/* Preview hint */}
         <div className="bg-[#f0eeff] rounded-xl px-3 py-2.5" dir="rtl">

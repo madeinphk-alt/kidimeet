@@ -144,6 +144,8 @@ export interface FriendParent {
   role: 'mom' | 'dad';
   /** day indices (0=Sun) this parent is responsible. Empty = all days */
   custodyDays: number[];
+  address?: string;
+  buildingDetails?: string;
 }
 
 export interface Friend {

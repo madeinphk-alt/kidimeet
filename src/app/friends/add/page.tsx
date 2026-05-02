@@ -340,7 +340,7 @@ function AddFriendForm() {
                 dir="rtl"
               />
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 mb-3">
                 {(['mom', 'dad'] as const).map(r => (
                   <button
                     key={r}
@@ -354,6 +354,24 @@ function AddFriendForm() {
                   </button>
                 ))}
               </div>
+
+              <label className="block text-[12px] font-medium text-gray-500 mb-1.5">כתובת <span className="font-normal opacity-60">(אופציונלי)</span></label>
+              <input
+                value={parents[0].address ?? ''}
+                onChange={e => updateParent(0, 'address', e.target.value)}
+                placeholder="רחוב ומספר בית"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] text-right mb-3 focus:outline-none focus:border-[#534AB7] bg-white"
+                dir="rtl"
+              />
+
+              <label className="block text-[12px] font-medium text-gray-500 mb-1.5">תיאור נוסף <span className="font-normal opacity-60">(קומה, קוד, מספר דלת ומה שיעזור למצוא בקלות)</span></label>
+              <input
+                value={parents[0].buildingDetails ?? ''}
+                onChange={e => updateParent(0, 'buildingDetails', e.target.value)}
+                placeholder="קומה 2, קוד 1234, דלת ימין"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] text-right mb-3 focus:outline-none focus:border-[#534AB7] bg-white"
+                dir="rtl"
+              />
 
               {/* Custody days for parent 1 when split */}
               {splitCustody && (
@@ -429,7 +447,7 @@ function AddFriendForm() {
                     dir="rtl"
                   />
 
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2 mb-3">
                     {(['mom', 'dad'] as const).map(r => (
                       <button
                         key={r}
@@ -443,6 +461,24 @@ function AddFriendForm() {
                       </button>
                     ))}
                   </div>
+
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">כתובת <span className="font-normal opacity-60">(אופציונלי)</span></label>
+                  <input
+                    value={parents[1]?.address ?? ''}
+                    onChange={e => updateParent(1, 'address', e.target.value)}
+                    placeholder="רחוב ומספר בית"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] text-right mb-3 focus:outline-none focus:border-[#534AB7] bg-white"
+                    dir="rtl"
+                  />
+
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">תיאור נוסף <span className="font-normal opacity-60">(קומה, קוד, מספר דלת ומה שיעזור למצוא בקלות)</span></label>
+                  <input
+                    value={parents[1]?.buildingDetails ?? ''}
+                    onChange={e => updateParent(1, 'buildingDetails', e.target.value)}
+                    placeholder="קומה 2, קוד 1234, דלת ימין"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] text-right mb-3 focus:outline-none focus:border-[#534AB7] bg-white"
+                    dir="rtl"
+                  />
 
                   <div className="mt-3">
                     <p className="text-[11px] text-gray-400 mb-2">ימי משמורת</p>

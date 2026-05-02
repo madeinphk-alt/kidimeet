@@ -323,7 +323,7 @@ function AddFriendForm() {
                 <input
                   value={getParentLast(0)}
                   onChange={e => updateParentNamePart(0, 'last', e.target.value)}
-                  placeholder="משפחה"
+                  placeholder="שם משפחה"
                   className="w-0 flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white"
                   dir="rtl"
                 />

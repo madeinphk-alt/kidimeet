@@ -2,10 +2,10 @@
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import clsx from 'clsx';
-import { getMsgTemplates, saveMsgTemplates, DEFAULT_MSG_TEMPLATES } from '@/lib/storage';
+import { getMsgTemplates, saveMsgTemplates, DEFAULT_MSG_TEMPLATES, getCustomTemplates, saveCustomTemplate } from '@/lib/storage';
 import type { MessageTemplates } from '@/lib/storage';
 
-const MSG_LABELS: Record<keyof MessageTemplates, string> = {
+const FIXED_LABELS: Record<keyof MessageTemplates, string> = {
   initial:  'פנייה ראשונית',
   propose1: 'הצעת מפגש נוסח #1',
   propose2: 'הצעת מפגש נוסח #2',
@@ -20,18 +20,26 @@ const VARS: { label: string; value: string }[] = [
 ];
 
 function EditMessageForm() {
-  const router  = useRouter();
-  const params  = useParams();
-  const key     = params.key as keyof MessageTemplates;
+  const router   = useRouter();
+  const params   = useParams();
+  const key      = params.key as string;
+  const isFixed  = key in FIXED_LABELS;
 
-  const [text,  setText]  = useState('');
-  const [saved, setSaved] = useState(false);
+  const [text,     setText]     = useState('');
+  const [msgLabel, setMsgLabel] = useState('');
+  const [saved,    setSaved]    = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    const t = getMsgTemplates();
-    if (key in t) setText(t[key]);
-  }, [key]);
+    if (isFixed) {
+      const t = getMsgTemplates();
+      setText(t[key as keyof MessageTemplates]);
+      setMsgLabel(FIXED_LABELS[key as keyof MessageTemplates]);
+    } else {
+      const c = getCustomTemplates().find(x => x.id === key);
+      if (c) { setText(c.text); setMsgLabel(c.label); }
+    }
+  }, [key, isFixed]);
 
   const insertVar = (v: string) => {
     const el = textareaRef.current;
@@ -48,17 +56,21 @@ function EditMessageForm() {
   };
 
   const handleSave = () => {
-    const t = getMsgTemplates();
-    saveMsgTemplates({ ...t, [key]: text });
+    if (isFixed) {
+      const t = getMsgTemplates();
+      saveMsgTemplates({ ...t, [key]: text });
+    } else {
+      const c = getCustomTemplates().find(x => x.id === key);
+      if (c) saveCustomTemplate({ ...c, text });
+    }
     setSaved(true);
     setTimeout(() => router.back(), 800);
   };
 
   const handleReset = () => {
-    if (confirm('לאפס לנוסח המקורי?')) setText(DEFAULT_MSG_TEMPLATES[key]);
+    if (!isFixed) return;
+    if (confirm('לאפס לנוסח המקורי?')) setText(DEFAULT_MSG_TEMPLATES[key as keyof MessageTemplates]);
   };
-
-  if (!(key in MSG_LABELS)) return null;
 
   return (
     <div className="flex flex-col h-[100dvh] bg-[#f7f6fb]">
@@ -67,13 +79,12 @@ function EditMessageForm() {
         <button onClick={() => router.back()} className="text-white/80 text-[13px] bg-white/15 rounded-full px-3 py-1.5">
           ← חזרה
         </button>
-        <span className="text-white text-[14px] font-medium">{MSG_LABELS[key]}</span>
-        <button
-          onClick={handleReset}
-          className="text-white/70 text-[12px] bg-white/15 rounded-full px-3 py-1.5"
-        >
-          איפוס
-        </button>
+        <span className="text-white text-[14px] font-medium">{msgLabel}</span>
+        {isFixed ? (
+          <button onClick={handleReset} className="text-white/70 text-[12px] bg-white/15 rounded-full px-3 py-1.5">
+            איפוס
+          </button>
+        ) : <div className="w-14" />}
       </header>
 
       <main className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">

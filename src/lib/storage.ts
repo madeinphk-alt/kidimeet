@@ -376,6 +376,36 @@ export function saveMsgTemplates(t: MessageTemplates): void {
   localStorage.setItem(MSG_TEMPLATES_KEY, JSON.stringify(t));
 }
 
+// ─── Custom Message Templates (user-added) ───────────────────────────────────
+
+export interface CustomTemplate {
+  id: string;
+  label: string;
+  text: string;
+}
+
+const CUSTOM_TEMPLATES_KEY = 'kidimeet_custom_templates';
+
+export function getCustomTemplates(): CustomTemplate[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(CUSTOM_TEMPLATES_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+export function saveCustomTemplate(t: CustomTemplate): void {
+  const list = getCustomTemplates();
+  const idx = list.findIndex(x => x.id === t.id);
+  if (idx >= 0) list[idx] = t; else list.push(t);
+  localStorage.setItem(CUSTOM_TEMPLATES_KEY, JSON.stringify(list));
+}
+
+export function deleteCustomTemplate(id: string): void {
+  const list = getCustomTemplates().filter(t => t.id !== id);
+  localStorage.setItem(CUSTOM_TEMPLATES_KEY, JSON.stringify(list));
+}
+
 export function applyMsgTemplate(
   template: string,
   vars: { parentFirst: string; myName: string; myChild: string; friendName: string; role: string }

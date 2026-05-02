@@ -22,7 +22,7 @@ export default function MessagesPage() {
         <button onClick={() => router.back()} className="text-white/80 text-[13px] bg-white/15 rounded-full px-3 py-1.5">
           ← חזרה
         </button>
-        <span className="text-white text-[15px] font-medium">ערכיית הודעות</span>
+        <span className="text-white text-[15px] font-medium">עריכת הודעות</span>
         <div className="w-16" />
       </header>
 
@@ -35,12 +35,12 @@ export default function MessagesPage() {
             dir="rtl"
           >
             <div className="flex items-center justify-between">
-              <span className="text-gray-400 text-lg">›</span>
-              <div>
+              <span className="text-gray-400 text-lg shrink-0">›</span>
+              <div className="text-right flex-1 ml-2">
                 <p className="text-[15px] font-semibold text-gray-900">{label}</p>
                 <p className="text-[12px] text-gray-400 mt-0.5">{desc}</p>
                 {templates && (
-                  <p className="text-[11px] text-gray-300 mt-1 line-clamp-1 truncate max-w-[240px]">
+                  <p className="text-[11px] text-gray-300 mt-1 truncate">
                     {templates[key].split('\n')[0]}
                   </p>
                 )}

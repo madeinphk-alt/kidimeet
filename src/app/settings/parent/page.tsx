@@ -55,28 +55,25 @@ export default function EditParentPage() {
       <main className="flex-1 overflow-y-auto p-4">
         <div className="bg-white rounded-xl border border-[#e0ddf0] px-4 py-4 flex flex-col gap-4" dir="rtl">
 
-          {/* שם פרטי */}
+          {/* שם פרטי + משפחה */}
           <div>
-            <label className="block text-[12px] font-medium text-gray-500 mb-1.5">שם פרטי</label>
-            <input
-              value={firstName}
-              onChange={e => setFirstName(e.target.value)}
-              placeholder="דנה"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-[#fafafa]"
-              dir="rtl"
-            />
-          </div>
-
-          {/* שם משפחה */}
-          <div>
-            <label className="block text-[12px] font-medium text-gray-500 mb-1.5">שם משפחה</label>
-            <input
-              value={lastName}
-              onChange={e => setLastName(e.target.value)}
-              placeholder="ברק"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-[#fafafa]"
-              dir="rtl"
-            />
+            <label className="block text-[12px] font-medium text-gray-500 mb-1.5">שם</label>
+            <div className="flex gap-2">
+              <input
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+                placeholder="שם פרטי"
+                className="w-0 flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-3 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-[#fafafa]"
+                dir="rtl"
+              />
+              <input
+                value={lastName}
+                onChange={e => setLastName(e.target.value)}
+                placeholder="משפחה"
+                className="w-0 flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-3 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-[#fafafa]"
+                dir="rtl"
+              />
+            </div>
           </div>
 
           {/* טלפון */}

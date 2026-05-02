@@ -96,6 +96,17 @@ function AddFriendForm() {
     setParents(ps => ps.map((p, i) => i === idx ? { ...p, [field]: value } : p));
   };
 
+  const getParentFirst = (idx: number) =>
+    (parents[idx]?.name ?? '').trim().split(' ')[0] ?? '';
+  const getParentLast = (idx: number) =>
+    (parents[idx]?.name ?? '').trim().split(' ').slice(1).join(' ');
+  const updateParentNamePart = (idx: number, part: 'first' | 'last', val: string) => {
+    const cur = (parents[idx]?.name ?? '').trim().split(' ');
+    const first = part === 'first' ? val : (cur[0] ?? '');
+    const last  = part === 'last'  ? val : cur.slice(1).join(' ');
+    updateParent(idx, 'name', [first, last].filter(Boolean).join(' '));
+  };
+
   const toggleCustodyDay = (parentIdx: number, day: number) => {
     setParents(ps => ps.map((p, i) => {
       if (i !== parentIdx) return p;
@@ -302,13 +313,22 @@ function AddFriendForm() {
               </p>
 
               <label className="block text-[12px] font-medium text-gray-500 mb-1.5">שם</label>
-              <input
-                value={parents[0].name}
-                onChange={e => updateParent(0, 'name', e.target.value)}
-                placeholder="לדוגמא: ליאת לוי"
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] text-right mb-3 focus:outline-none focus:border-[#534AB7] bg-white"
-                dir="rtl"
-              />
+              <div className="flex gap-2 mb-3">
+                <input
+                  value={getParentFirst(0)}
+                  onChange={e => updateParentNamePart(0, 'first', e.target.value)}
+                  placeholder="שם פרטי"
+                  className="w-0 flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white"
+                  dir="rtl"
+                />
+                <input
+                  value={getParentLast(0)}
+                  onChange={e => updateParentNamePart(0, 'last', e.target.value)}
+                  placeholder="משפחה"
+                  className="w-0 flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white"
+                  dir="rtl"
+                />
+              </div>
 
               <label className="block text-[12px] font-medium text-gray-500 mb-1.5">טלפון</label>
               <input
@@ -382,13 +402,22 @@ function AddFriendForm() {
                   </div>
 
                   <label className="block text-[12px] font-medium text-gray-500 mb-1.5">שם</label>
-                  <input
-                    value={parents[1]?.name ?? ''}
-                    onChange={e => updateParent(1, 'name', e.target.value)}
-                    placeholder="לדוגמא: רון לוי"
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] text-right mb-3 focus:outline-none focus:border-[#534AB7] bg-white"
-                    dir="rtl"
-                  />
+                  <div className="flex gap-2 mb-3">
+                    <input
+                      value={getParentFirst(1)}
+                      onChange={e => updateParentNamePart(1, 'first', e.target.value)}
+                      placeholder="שם פרטי"
+                      className="w-0 flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white"
+                      dir="rtl"
+                    />
+                    <input
+                      value={getParentLast(1)}
+                      onChange={e => updateParentNamePart(1, 'last', e.target.value)}
+                      placeholder="משפחה"
+                      className="w-0 flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white"
+                      dir="rtl"
+                    />
+                  </div>
 
                   <label className="block text-[12px] font-medium text-gray-500 mb-1.5">טלפון</label>
                   <input

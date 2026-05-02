@@ -204,42 +204,30 @@ export default function ProfilePage() {
         {/* ── Parent info ──────────────────────────────────────────────── */}
         <div className="mb-3">
           <p className="text-[11px] font-medium text-gray-400 mb-2 text-right">פרטי ההורה</p>
-          <div className="bg-white rounded-xl border border-[#e0ddf0] px-4 py-3" dir="rtl">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[14px] font-semibold text-gray-900">{profile.parent.name || '—'}</p>
-                <p className="text-[12px] text-gray-400 mt-0.5">{profile.parent.phone || '—'}</p>
-                {profile.parent.address && (
-                  <p className="text-[11px] text-gray-400 mt-0.5">📍 {profile.parent.address}</p>
-                )}
-              </div>
-              <button
-                onClick={() => router.push('/settings/parent')}
-                className="text-[11px] text-gray-400 bg-gray-100 rounded-lg px-3 py-1.5"
-              >
-                ערוך
-              </button>
-            </div>
-          </div>
+          <button
+            onClick={() => router.push('/settings/parent')}
+            className="w-full bg-white rounded-xl border border-[#e0ddf0] px-4 py-3 text-right"
+            dir="rtl"
+          >
+            <p className="text-[14px] font-semibold text-gray-900">{profile.parent.name || '—'}</p>
+            <p className="text-[12px] text-gray-400 mt-0.5">{profile.parent.phone || '—'}</p>
+            {profile.parent.address && (
+              <p className="text-[11px] text-gray-400 mt-0.5">📍 {profile.parent.address}</p>
+            )}
+          </button>
         </div>
 
         {/* ── Message Templates ────────────────────────────────────────────── */}
         <div className="mb-3">
           <p className="text-[11px] font-medium text-gray-400 mb-2 text-right">הודעות</p>
-          <div className="bg-white rounded-xl border border-[#e0ddf0] px-4 py-3" dir="rtl">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[14px] font-semibold text-gray-900">עריכת הודעות</p>
-                <p className="text-[12px] text-gray-400 mt-0.5">עריכת נוסח ההודעות הוואטסאפ שישלחו להורים</p>
-              </div>
-              <button
-                onClick={() => router.push('/settings/messages')}
-                className="text-[11px] text-gray-400 bg-gray-100 rounded-lg px-3 py-1.5"
-              >
-                ערוך
-              </button>
-            </div>
-          </div>
+          <button
+            onClick={() => router.push('/settings/messages')}
+            className="w-full bg-white rounded-xl border border-[#e0ddf0] px-4 py-3 text-right"
+            dir="rtl"
+          >
+            <p className="text-[14px] font-semibold text-gray-900">עריכת הודעות</p>
+            <p className="text-[12px] text-gray-400 mt-0.5">עריכת נוסח ההודעות הוואטסאפ שישלחו להורים</p>
+          </button>
         </div>
 
       </main>

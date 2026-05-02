@@ -8,7 +8,7 @@ import { HEB_DAYS, HEB_DAYS_SINGLE } from '@/lib/utils';
 import DayAvailPicker from '@/components/DayAvailPicker';
 import BottomNav from '@/components/BottomNav';
 
-const STEPS = ['הילד', 'ההורים', 'זמינות', 'הערות'];
+const STEPS = ['הילד', 'ההורים', 'זמינות'];
 const DEFAULT_PARENT: FriendParent = { name: '', phone: '', role: 'mom', custodyDays: [] };
 
 function formatWaPhone(phone: string): string {
@@ -147,7 +147,6 @@ function AddFriendForm() {
     parents[0].name.trim().length > 0 && parents[0].phone.trim().length > 0 &&
       (!splitCustody || (parents[1].name.trim().length > 0 && parents[1].phone.trim().length > 0)),
     true, // availability: always ok — can save pending or fill now
-    true,
   ];
 
   // ── Build friend object ─────────────────────────────────────────────────
@@ -579,47 +578,6 @@ function AddFriendForm() {
           </div>
         )}
 
-        {/* ── Step 3: Notes ── */}
-        {step === 3 && (
-          <div>
-            <h2 className="text-[17px] font-medium text-gray-800 mb-1">הערות על {childName}</h2>
-            <p className="text-[13px] text-gray-400 mb-5">חופשי לכתוב כל מה שחשוב לזכור</p>
-
-            <label className="block text-[12px] font-medium text-gray-500 mb-1.5">כתובת בית <span className="font-normal opacity-60">(אופציונלי — לניווט)</span></label>
-            <input
-              value={friendAddress}
-              onChange={e => setFriendAddress(e.target.value)}
-              placeholder="לדוגמא: רחוב הרצל 12, תל אביב"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-[15px] text-right mb-5 focus:outline-none focus:border-[#534AB7] bg-white"
-              dir="rtl"
-            />
-
-            <label className="block text-[12px] font-medium text-gray-500 mb-1.5">הערות <span className="font-normal opacity-60">(אופציונלי)</span></label>
-            <textarea
-              value={notes}
-              onChange={e => setNotes(e.target.value)}
-              placeholder="לדוגמא: צמחוני, אלרגי לאגוזים, אוהב מיינקראפט..."
-              rows={5}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-[14px] text-right focus:outline-none focus:border-[#534AB7] bg-white resize-none"
-              dir="rtl"
-            />
-
-            {/* Summary card */}
-            <div className="mt-5 bg-[#EEEDFE] rounded-xl border border-[#c0bce0] p-4">
-              <p className="text-[12px] font-medium text-[#534AB7] mb-2">סיכום</p>
-              <p className="text-[14px] font-medium text-gray-800">{childName}</p>
-              <p className="text-[12px] text-gray-500 mt-0.5">
-                {parents.map(p => `${p.name} (${p.role === 'mom' ? 'אמא' : 'אבא'})`).join(' + ')}
-              </p>
-              <p className="text-[12px] text-[#534AB7] mt-1">
-                פנוי ב: {Object.entries(avail)
-                  .filter(([, s]) => s.active)
-                  .map(([d]) => HEB_DAYS[Number(d)])
-                  .join(', ') || '—'}
-              </p>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Bottom buttons */}
@@ -641,14 +599,14 @@ function AddFriendForm() {
             </button>
           )}
           <button
-            onClick={() => step < 3 ? setStep(s => s + 1) : finish()}
+            onClick={() => step < 2 ? setStep(s => s + 1) : finish()}
             disabled={!canNext[step]}
             className={clsx(
               'flex-1 py-3 rounded-xl text-white text-[15px] font-medium transition-opacity',
               canNext[step] ? 'bg-[#534AB7]' : 'bg-[#534AB7] opacity-40'
             )}
           >
-            {step < 3 ? 'המשך' : (editId ? 'שמור שינויים' : 'הוסף חבר')}
+            {step < 2 ? 'המשך' : (editId ? 'שמור שינויים' : 'הוסף חבר')}
           </button>
         </div>
       </div>

@@ -229,8 +229,8 @@ export default function ProfilePage() {
           <div className="bg-white rounded-xl border border-[#e0ddf0] px-4 py-3" dir="rtl">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[14px] font-semibold text-gray-900">ערכיית הודעות</p>
-                <p className="text-[12px] text-gray-400 mt-0.5">פנייה ראשונית, הצעת מפגש #1, #2</p>
+                <p className="text-[14px] font-semibold text-gray-900">עריכת הודעות</p>
+                <p className="text-[12px] text-gray-400 mt-0.5">עריכת נוסח ההודעות הוואטסאפ שישלחו להורים</p>
               </div>
               <button
                 onClick={() => router.push('/settings/messages')}

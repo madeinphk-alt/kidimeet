@@ -4,8 +4,42 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { format, differenceInDays } from 'date-fns';
-import { getPlannedMeetups, deletePlannedMeetup, getFriends, getProfile, getActiveChild, MEETUP_TYPE_DEFS, formatTime } from '@/lib/storage';
+import { getPlannedMeetups, deletePlannedMeetup, getFriends, getProfile, getActiveChild, MEETUP_TYPE_DEFS, formatTime, getEvents } from '@/lib/storage';
 import type { PlannedMeetup, Friend, UserProfile } from '@/lib/storage';
+
+function downloadICS(meetups: PlannedMeetup[]): void {
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  const events = getEvents();
+  const lines = [
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//KidiMeet//IL',
+    'CALSCALE:GREGORIAN','X-WR-CALNAME:KidiMeet — מפגשים ואירועים',
+    'X-WR-TIMEZONE:Asia/Jerusalem',
+  ];
+  meetups.forEach(m => {
+    const d = m.date.replace(/-/g,'');
+    lines.push('BEGIN:VEVENT',`UID:meetup-${m.id}@kidimeet`,
+      `DTSTART;TZID=Asia/Jerusalem:${d}T${pad(Math.floor(m.timeFrom/60))}${pad(m.timeFrom%60)}00`,
+      `DTEND;TZID=Asia/Jerusalem:${d}T${pad(Math.floor(m.timeTo/60))}${pad(m.timeTo%60)}00`,
+      `SUMMARY:${m.title}`,
+      ...(m.location ? [`LOCATION:${m.location}`] : []),
+      ...(m.notes    ? [`DESCRIPTION:${m.notes}`]  : []),
+      'END:VEVENT');
+  });
+  events.forEach(ev => {
+    const d = ev.date.replace(/-/g,'');
+    lines.push('BEGIN:VEVENT',`UID:event-${ev.id}@kidimeet`,
+      `DTSTART;VALUE=DATE:${d}`,`DTEND;VALUE=DATE:${d}`,
+      `SUMMARY:${ev.title}`,
+      ...(ev.bring ? [`DESCRIPTION:להביא: ${ev.bring}`] : []),
+      'END:VEVENT');
+  });
+  lines.push('END:VCALENDAR');
+  const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'kidimeet.ics'; a.click();
+  URL.revokeObjectURL(url);
+}
 import { AVATAR_COLORS } from '@/lib/utils';
 import BottomNav from '@/components/BottomNav';
 import ChildSwitcher from '@/components/ChildSwitcher';
@@ -262,6 +296,17 @@ export default function LuzPage() {
         )}
       </main>
 
+      {meetups.length > 0 && (
+        <div className="px-3 pb-2 bg-[#f7f6fb]">
+          <button
+            onClick={() => downloadICS(meetups)}
+            className="w-full flex items-center justify-center gap-2 bg-white border border-[#e0ddf0] text-[#534AB7] text-[13px] font-medium py-2.5 rounded-xl active:opacity-70"
+          >
+            <span>📤</span>
+            <span>ייצוא מפגשים לגוגל קלנדר</span>
+          </button>
+        </div>
+      )}
       <BottomNav active="home" />
     </div>
   );

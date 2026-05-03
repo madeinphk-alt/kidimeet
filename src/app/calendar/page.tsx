@@ -332,25 +332,6 @@ export default function CalendarPage() {
           </div>
         </div>
 
-        {/* ICS Export */}
-        {profile && (
-          <div className="bg-white rounded-xl border border-[#e0ddf0] px-4 py-3 mb-3" dir="rtl">
-            <button
-              onClick={() => {
-                const child = getActiveChild(profile);
-                downloadICS(generateICS(profile, specialDays, events), `kidimeet-${child.name}.ics`);
-              }}
-              className="w-full flex items-center justify-center gap-2 bg-[#534AB7] text-white text-[14px] font-medium py-2.5 rounded-xl active:opacity-80"
-            >
-              <span>📤</span>
-              <span>ייצוא לגוגל קלנדר</span>
-            </button>
-            <p className="text-[11px] text-gray-400 text-center mt-2">
-              פתח את הקובץ ביישום לוח שנה גוגל כדי לייבא את הנתונים
-            </p>
-          </div>
-        )}
-
         {/* Legend */}
         <div className="bg-white rounded-xl border border-[#e0ddf0] px-4 py-3 mb-3">
           <div className="flex flex-wrap gap-x-4 gap-y-1.5" dir="rtl">
@@ -369,6 +350,32 @@ export default function CalendarPage() {
             ))}
           </div>
         </div>
+
+        {/* Tip */}
+        <div className="bg-[#EEEDFE] rounded-xl border border-[#c5c0f0] px-4 py-3 mb-3" dir="rtl">
+          <p className="text-[12px] text-[#534AB7] leading-5">
+            💡 לחצו על יום כדי לעדכן אותו באופן ספציפי — אם אתם רוצים מפגשים או לא, מעבר לימים הפנויים הקבועים
+          </p>
+        </div>
+
+        {/* ICS Export */}
+        {profile && (
+          <div className="bg-white rounded-xl border border-[#e0ddf0] px-4 py-3 mb-3" dir="rtl">
+            <button
+              onClick={() => {
+                const child = getActiveChild(profile);
+                downloadICS(generateICS(profile, specialDays, events), `kidimeet-${child.name}.ics`);
+              }}
+              className="w-full flex items-center justify-center gap-2 bg-[#534AB7] text-white text-[14px] font-medium py-2.5 rounded-xl active:opacity-80"
+            >
+              <span>📤</span>
+              <span>ייצוא לגוגל קלנדר</span>
+            </button>
+            <p className="text-[11px] text-gray-400 text-center mt-2">
+              פתח את הקובץ ביישום לוח שנה גוגל כדי לייבא את הנתונים
+            </p>
+          </div>
+        )}
 
         {/* Upcoming events */}
         {events.filter(e => e.date >= format(today, 'yyyy-MM-dd')).length > 0 && (

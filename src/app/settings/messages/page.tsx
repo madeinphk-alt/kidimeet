@@ -31,15 +31,15 @@ export default function MessagesPage() {
   return (
     <div className="flex flex-col h-[100dvh] bg-[#f7f6fb]">
       <header className="bg-[#534AB7] px-4 py-3 flex items-center justify-between">
-        <button onClick={() => router.back()} className="text-white/80 text-[13px] bg-white/15 rounded-full px-3 py-1.5">
-          ← חזרה
-        </button>
-        <span className="text-white text-[15px] font-medium">עריכת הודעות</span>
         <button
           onClick={() => router.push('/settings/messages/new')}
           className="text-white text-[13px] bg-white/20 rounded-full px-3 py-1.5 font-medium"
         >
           + הוספה
+        </button>
+        <span className="text-white text-[15px] font-medium">עריכת הודעות</span>
+        <button onClick={() => router.back()} className="text-white/80 text-[13px] bg-white/15 rounded-full px-3 py-1.5">
+          חזרה
         </button>
       </header>
 

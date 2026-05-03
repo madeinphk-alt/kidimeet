@@ -7,11 +7,11 @@ import { format, addMonths, subMonths, startOfMonth, getDaysInMonth } from 'date
 import {
   getProfile, getSpecialDays, saveSpecialDay, deleteSpecialDay,
   getEvents, saveEvent, deleteEvent,
-  getActiveChild,
+  getActiveChild, getPlannedMeetups,
   DEFAULT_DAY_SLOT, formatTime,
 } from '@/lib/storage';
 import { getHoliday } from '@/lib/jewish-holidays';
-import type { UserProfile, SpecialDay, SchoolEvent, EventType } from '@/lib/storage';
+import type { UserProfile, SpecialDay, SchoolEvent, EventType, PlannedMeetup } from '@/lib/storage';
 import DayAvailPicker from '@/components/DayAvailPicker';
 import BottomNav from '@/components/BottomNav';
 import ChildSwitcher from '@/components/ChildSwitcher';
@@ -50,65 +50,29 @@ function getDayStatus(date: Date, profile: UserProfile | null, specialDays: Spec
 
 // ─── ICS Generation ───────────────────────────────────────────────────────────
 
-function generateICS(profile: UserProfile, specialDays: SpecialDay[], events: SchoolEvent[]): string {
-  const child = getActiveChild(profile);
+function generateICS(meetups: PlannedMeetup[], events: SchoolEvent[]): string {
+  const pad = (n: number) => n.toString().padStart(2, '0');
+
   const lines: string[] = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
     'PRODID:-//KidiMeet//IL',
     'CALSCALE:GREGORIAN',
-    'X-WR-CALNAME:KidiMeet - ' + child.name,
+    'X-WR-CALNAME:KidiMeet — מפגשים ואירועים',
     'X-WR-TIMEZONE:Asia/Jerusalem',
   ];
 
-  const HEB_DAYS_LONG = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
-  const today = new Date();
-  const pad = (n: number) => n.toString().padStart(2, '0');
-
-  // Weekly recurring events
-  Object.entries(child.availability).forEach(([dayStr, slot]) => {
-    if (!slot.active) return;
-    const dow = parseInt(dayStr);
-    const slotList = [
-      slot.afternoon && { label: 'אחה"צ', from: slot.afternoonFrom, to: slot.afternoonTo },
-      slot.noon      && { label: 'צהרים',  from: slot.noonFrom,      to: slot.noonTo },
-      slot.morning   && { label: 'בוקר',   from: slot.morningFrom,   to: slot.morningTo },
-    ].filter(Boolean) as { label: string; from: number; to: number }[];
-
-    slotList.forEach((s, idx) => {
-      // find next occurrence of this day of week
-      const next = new Date(today);
-      while (next.getDay() !== dow) next.setDate(next.getDate() + 1);
-      const dateStr2 = `${next.getFullYear()}${pad(next.getMonth()+1)}${pad(next.getDate())}`;
-
-      lines.push('BEGIN:VEVENT');
-      lines.push(`UID:weekly-${dow}-${idx}-${child.id}@kidimeet`);
-      lines.push(`DTSTART;TZID=Asia/Jerusalem:${dateStr2}T${pad(Math.floor(s.from/60))}${pad(s.from%60)}00`);
-      lines.push(`DTEND;TZID=Asia/Jerusalem:${dateStr2}T${pad(Math.floor(s.to/60))}${pad(s.to%60)}00`);
-      lines.push(`SUMMARY:${child.name} פנוי - ${s.label}`);
-      lines.push(`DESCRIPTION:זמינות קבועה של ${child.name} - KidiMeet\\nwww.matovli.co.il`);
-      lines.push('RRULE:FREQ=WEEKLY;COUNT=26');
-      lines.push('COLOR:purple');
-      lines.push('END:VEVENT');
-    });
-  });
-
-  // Special open days
-  specialDays.filter(sd => sd.type === 'open').forEach(sd => {
-    const slotList = [
-      sd.afternoon && { label: 'אחה"צ', from: sd.afternoonFrom, to: sd.afternoonTo },
-      sd.noon      && { label: 'צהרים',  from: sd.noonFrom,      to: sd.noonTo },
-      sd.morning   && { label: 'בוקר',   from: sd.morningFrom,   to: sd.morningTo },
-    ].filter(Boolean) as { label: string; from: number; to: number }[];
-    const dateClean = sd.date.replace(/-/g, '');
-    slotList.forEach((s, idx) => {
-      lines.push('BEGIN:VEVENT');
-      lines.push(`UID:open-${sd.date}-${idx}@kidimeet`);
-      lines.push(`DTSTART;TZID=Asia/Jerusalem:${dateClean}T${pad(Math.floor(s.from/60))}${pad(s.from%60)}00`);
-      lines.push(`DTEND;TZID=Asia/Jerusalem:${dateClean}T${pad(Math.floor(s.to/60))}${pad(s.to%60)}00`);
-      lines.push(`SUMMARY:✅ ${child.name} פנוי (מיוחד) - ${s.label}`);
-      lines.push('END:VEVENT');
-    });
+  // Planned meetups
+  meetups.forEach(m => {
+    const dateClean = m.date.replace(/-/g, '');
+    lines.push('BEGIN:VEVENT');
+    lines.push(`UID:meetup-${m.id}@kidimeet`);
+    lines.push(`DTSTART;TZID=Asia/Jerusalem:${dateClean}T${pad(Math.floor(m.timeFrom/60))}${pad(m.timeFrom%60)}00`);
+    lines.push(`DTEND;TZID=Asia/Jerusalem:${dateClean}T${pad(Math.floor(m.timeTo/60))}${pad(m.timeTo%60)}00`);
+    lines.push(`SUMMARY:${m.title}`);
+    if (m.location) lines.push(`LOCATION:${m.location}`);
+    if (m.notes)    lines.push(`DESCRIPTION:${m.notes}`);
+    lines.push('END:VEVENT');
   });
 
   // School events (all-day)
@@ -364,15 +328,15 @@ export default function CalendarPage() {
             <button
               onClick={() => {
                 const child = getActiveChild(profile);
-                downloadICS(generateICS(profile, specialDays, events), `kidimeet-${child.name}.ics`);
+                downloadICS(generateICS(getPlannedMeetups(), events), `kidimeet-${child.name}.ics`);
               }}
               className="w-full flex items-center justify-center gap-2 bg-[#534AB7] text-white text-[14px] font-medium py-2.5 rounded-xl active:opacity-80"
             >
               <span>📤</span>
-              <span>ייצוא לגוגל קלנדר</span>
+              <span>ייצוא מפגשים ואירועים לגוגל קלנדר</span>
             </button>
             <p className="text-[11px] text-gray-400 text-center mt-2">
-              פתח את הקובץ ביישום לוח שנה גוגל כדי לייבא את הנתונים
+              מייצא רק מפגשים ואירועים שנקבעו
             </p>
           </div>
         )}

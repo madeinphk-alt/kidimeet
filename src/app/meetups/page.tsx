@@ -152,9 +152,9 @@ export default function MeetupsPage() {
 
     if (variant === 1) {
       const prevLine = prevHost
-        ? `פעם אחרונה היה ${prevHost === 'us' ? 'אצלנו' : 'אצלכם'}, אולי ${host === 'us' ? 'אצלנו' : 'אצלכם'} הפעם?`
+        ? `פעם אחרונה היתה ${prevHost === 'us' ? 'אצלנו' : 'אצלכם'}, אולי הפעם ${host === 'us' ? 'אצלנו' : 'אצלכם'}?`
         : host === 'us' ? 'חשבנו לארח אצלנו 🙂' : 'נשמח לבוא אליכם 🙂';
-      return `היי ${parentFirst} 👋\nחשבנו ש${friendFirst} ו${myChild} אולי ירצו להיפגש\nב- ${dateLabel}${timeHint ? ` ${timeHint}` : ''}\n${prevLine}\n\nמה דעתכם?`;
+      return `היי ${parentFirst} 👋\nחשבנו ש${friendFirst} ו${myChild} אולי ירצו להיפגש\nב${dateLabel}${timeHint ? ` ${timeHint}` : ''}\n${prevLine}\n\nמה דעתכם?\nעדכנו...`;
     } else {
       const hostShort = host === 'us' ? 'אצלנו' : 'אצלכם';
       return `היי ${parentFirst} 😊\n${friendFirst} ו${myChild} רוצים להיפגש\n${dateLabel}${timeHint ? ` · ${timeHint}` : ''} · ${hostShort}\n\nמה אומרים?`;
@@ -247,7 +247,7 @@ export default function MeetupsPage() {
                   <button onClick={() => setHostFor(friend.id, dateStr, 'them')}
                     className={clsx('flex-1 py-2 rounded-xl border text-[12px] font-medium transition-colors',
                       pickedHost === 'them' ? 'bg-[#534AB7] border-[#534AB7] text-white' : 'bg-white border-gray-200 text-gray-500'
-                    )}>🚶 אצלהם</button>
+                    )}>🚶 אצלכם</button>
                   <button onClick={() => setHostFor(friend.id, dateStr, 'other')}
                     className={clsx('flex-1 py-2 rounded-xl border text-[12px] font-medium transition-colors',
                       pickedHost === 'other' ? 'bg-[#534AB7] border-[#534AB7] text-white' : 'bg-white border-gray-200 text-gray-500'

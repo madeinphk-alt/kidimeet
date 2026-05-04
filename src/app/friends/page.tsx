@@ -193,6 +193,14 @@ export default function FriendsPage() {
         )}
       </main>
 
+      <div className="px-4 py-2.5 bg-[#f7f6fb] border-t border-[#e8e5f5]">
+        <Link
+          href="/friends/add"
+          className="block w-full bg-[#534AB7] text-white text-[15px] font-medium text-center py-3 rounded-xl"
+        >
+          + הוסף חבר.ה
+        </Link>
+      </div>
       <BottomNav active="friends" />
     </div>
   );

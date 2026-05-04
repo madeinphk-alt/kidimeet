@@ -145,47 +145,44 @@ export default function FriendsPage() {
                     </span>
                   </div>
 
-                  {/* ── Action buttons ────────────────────────────────────── */}
-                  <div className="border-t border-[#f0eef8] px-3 py-2.5 flex flex-wrap gap-2">
-
-                    {/* פרופיל + היסטוריה */}
+                  {/* ── שורה 1: הודעות + פרופיל ──────────────────────────── */}
+                  <div className="border-t border-[#f0eef8] px-3 py-2.5 flex gap-2" dir="rtl">
+                    {profile && friend.parents.filter(p => p.phone).map((p, i) => (
+                      <button key={i}
+                        onClick={() => openWa(p.phone, buildAvailMsg(friend, p))}
+                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-[11px] text-gray-600">
+                        <span className="text-[#25D366]"><WaIcon /></span>
+                        הודעה ל{p.name.split(' ')[0]}
+                      </button>
+                    ))}
                     <Link href={`/friends/${friend.id}`}
                       className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#EEEDFE] text-[11px] text-[#534AB7]">
                       📋 פרופיל
                     </Link>
-
-                    {/* עריכה */}
-                    <Link href={`/friends/add?id=${friend.id}`}
-                      className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-[11px] text-gray-500">
-                      ✏️ ערוך
-                    </Link>
-
-                    {/* הודעה — בקשת זמינות לכל ההורים */}
-                    {profile && friend.parents.filter(p => p.phone).map((p, i) => (
-                      <button key={i}
-                        onClick={() => openWa(p.phone, buildAvailMsg(friend, p))}
-                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-[11px] text-gray-500">
-                        💬 הודעה{friend.parents.filter(p => p.phone).length > 1 ? ` ל${p.name.split(' ')[0]}` : ''}
-                      </button>
-                    ))}
-
-                    {/* הצע פליידייט לכל הורה */}
-                    {profile && friend.parents.filter(p => p.phone).map((p, i) => (
-                      <button key={i}
-                        onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 1))}
-                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#25D366] text-white text-[11px] font-medium">
-                        <WaIcon />הצע #1
-                      </button>
-                    ))}
-                    {profile && friend.parents.filter(p => p.phone).map((p, i) => (
-                      <button key={`p2-${i}`}
-                        onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 2))}
-                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#1aab55] text-white text-[11px] font-medium">
-                        <WaIcon />הצע #2
-                      </button>
-                    ))}
-
                   </div>
+
+                  {/* ── שורה 2: הצעות פליידייט ───────────────────────────── */}
+                  {profile && friend.parents.filter(p => p.phone).length > 0 && (
+                    <div className="border-t border-[#f0eef8] px-3 py-2.5 flex gap-2" dir="rtl">
+                      {friend.parents.filter(p => p.phone).map((p, i) => {
+                        const showName = friend.parents.filter(p => p.phone).length > 1;
+                        return (
+                          <>
+                            <button key={`p1-${i}`}
+                              onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 1))}
+                              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#25D366] text-white text-[11px] font-medium">
+                              <WaIcon />הצע #1{showName ? ` ל${p.name.split(' ')[0]}` : ''}
+                            </button>
+                            <button key={`p2-${i}`}
+                              onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 2))}
+                              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#1aab55] text-white text-[11px] font-medium">
+                              <WaIcon />הצע #2{showName ? ` ל${p.name.split(' ')[0]}` : ''}
+                            </button>
+                          </>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               );
             })}

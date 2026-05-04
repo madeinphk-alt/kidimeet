@@ -139,7 +139,7 @@ export default function MeetupsPage() {
   });
 
   // ── Propose playdate ──────────────────────────────────────────────────────
-  const buildProposeMsg = (friend: Friend, host: 'us' | 'them', date: Date, variant: 1 | 2): string => {
+  const buildProposeMsg = (friend: Friend, host: 'us' | 'them' | 'other', date: Date, variant: 1 | 2): string => {
     const parent      = friend.parents[0];
     const myChild     = profile ? getActiveChild(profile).name.split(' ')[0] : '';
     const parentFirst = parent.name.split(' ')[0];
@@ -148,20 +148,21 @@ export default function MeetupsPage() {
     const dow  = date.getDay();
     const slot = friend.availability[dow];
     const timeHint = slot?.afternoon ? `אחה"צ` : slot?.noon ? `צהריים` : slot?.morning ? `בוקר` : '';
-    const prevHost = lastMetHost(friend.id);
+    const dateLine = `ב${dateLabel}${timeHint ? ` ${timeHint}` : ''}`;
 
     if (variant === 1) {
-      const prevLine = prevHost
-        ? `פעם אחרונה היתה ${prevHost === 'us' ? 'אצלנו' : 'אצלכם'}, אולי הפעם ${host === 'us' ? 'אצלנו' : 'אצלכם'}?`
-        : host === 'us' ? 'חשבנו לארח אצלנו 🙂' : 'נשמח לבוא אליכם 🙂';
-      return `היי ${parentFirst} 👋\nחשבנו ש${friendFirst} ו${myChild} אולי ירצו להיפגש\nב${dateLabel}${timeHint ? ` ${timeHint}` : ''}\n${prevLine}\n\nמה דעתכם?\nעדכנו...`;
+      const hostLine =
+        host === 'us'    ? 'פעם אחרונה היתה אצלכם, אולי הפעם אצלנו?' :
+        host === 'them'  ? 'פעם אחרונה היתה אצלנו, אולי הפעם אצלכם?' :
+                           'חשבנו אולי להיפגש ב';
+      return `היי ${parentFirst} 👋\nחשבנו ש${friendFirst} ו${myChild} אולי ירצו להיפגש\n${dateLine}\n${hostLine}\nמה דעתכם?\nעדכנו...`;
     } else {
-      const hostShort = host === 'us' ? 'אצלנו' : 'אצלכם';
-      return `היי ${parentFirst} 😊\n${friendFirst} ו${myChild} רוצים להיפגש\n${dateLabel}${timeHint ? ` · ${timeHint}` : ''} · ${hostShort}\n\nמה אומרים?`;
+      const hostShort = host === 'us' ? 'אצלנו' : host === 'them' ? 'אצלכם' : '';
+      return `היי ${parentFirst} 😊\n${friendFirst} ו${myChild} רוצים להיפגש\n${dateLabel}${timeHint ? ` · ${timeHint}` : ''}${hostShort ? ` · ${hostShort}` : ''}\n\nמה אומרים?`;
     }
   };
 
-  const proposePlaydate = (friend: Friend, host: 'us' | 'them', date: Date, dateStr: string, variant: 1 | 2 = 1) => {
+  const proposePlaydate = (friend: Friend, host: 'us' | 'them' | 'other', date: Date, dateStr: string, variant: 1 | 2 = 1) => {
     const parent = friend.parents[0];
     if (!parent?.phone) return;
     const msg = buildProposeMsg(friend, host, date, variant);
@@ -256,7 +257,7 @@ export default function MeetupsPage() {
                 {/* שורה 2: הצעה */}
                 <div className="border-t border-[#f0eef8] px-3 py-2 flex gap-2" dir="rtl">
                   {(() => {
-                    const h = pickedHost === 'other' || !pickedHost ? 'us' : pickedHost;
+                    const h = pickedHost ?? 'us';
                     const parentFirst = friend.parents[0]?.name.split(' ')[0] ?? firstName;
                     return (
                       <>

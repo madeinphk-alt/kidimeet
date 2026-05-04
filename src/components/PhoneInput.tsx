@@ -52,7 +52,7 @@ export default function PhoneInput({ value, onChange, placeholder = '052-0000000
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
         type="tel"
-        className={`w-[72%] border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white ${className}`}
+        className={`flex-1 min-w-0 border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white ${className}`}
         dir="rtl"
       />
     </div>

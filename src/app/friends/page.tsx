@@ -16,6 +16,13 @@ function formatWaPhone(phone: string): string {
   return '972' + d;
 }
 
+const HEB_DAYS_SHORT = ['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'];
+
+function custodyLabel(days: number[]): string | null {
+  if (!days || days.length === 0) return null;
+  return days.map(d => HEB_DAYS_SHORT[d]).join(' ');
+}
+
 function WaIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 shrink-0">
@@ -132,34 +139,45 @@ export default function FriendsPage() {
                     <span className={clsx('text-[12px] truncate flex-1', isUrgent ? 'text-orange-500 font-medium' : 'text-gray-400')}>
                       {metLabel}{hostLabel ? ` · ${hostLabel}` : ''}
                     </span>
-                    <span className="text-gray-300 text-[15px] mr-2 shrink-0">✏️</span>
+                    <span className="text-[15px] mr-2 shrink-0">👤</span>
                   </Link>
 
-                  {/* ── שורה לכל הורה: הודעה + הצעות ────────────────────── */}
-                  {friend.parents.filter(p => p.phone).map((p, i) => (
-                    <div key={i} className="border-t border-[#f0eef8] px-3 py-2 flex items-center gap-2" dir="rtl">
-                      <button
-                        onClick={() => window.open(`https://wa.me/${formatWaPhone(p.phone)}`, '_blank')}
-                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-[11px] text-gray-600 shrink-0">
-                        <span className="text-[#25D366]"><WaIcon /></span>
-                        הודעה ל{p.name.split(' ')[0]}
-                      </button>
-                      {profile && (
-                        <>
+                  {/* ── שורה לכל הורה: זמינות + הודעה + הצעות ──────────── */}
+                  {friend.parents.filter(p => p.phone).map((p, i) => {
+                    const days = custodyLabel(p.custodyDays);
+                    return (
+                      <div key={i} className="border-t border-[#f0eef8]" dir="rtl">
+                        {days && (
+                          <div className="px-3 pt-1.5 flex items-center gap-1">
+                            <span className="text-[10px] text-gray-400">ימים:</span>
+                            <span className="text-[10px] text-[#534AB7] font-medium">{days}</span>
+                          </div>
+                        )}
+                        <div className="px-3 py-2 flex items-center gap-2">
                           <button
-                            onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 1))}
-                            className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-[#25D366] text-white text-[11px] font-medium">
-                            <WaIcon />הצע #1
+                            onClick={() => window.open(`https://wa.me/${formatWaPhone(p.phone)}`, '_blank')}
+                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-[11px] text-gray-600 shrink-0">
+                            <span className="text-[#25D366]"><WaIcon /></span>
+                            הודעה ל{p.name.split(' ')[0]}
                           </button>
-                          <button
-                            onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 2))}
-                            className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-[#1aab55] text-white text-[11px] font-medium">
-                            <WaIcon />הצע #2
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  ))}
+                          {profile && (
+                            <>
+                              <button
+                                onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 1))}
+                                className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-[#25D366] text-white text-[11px] font-medium">
+                                <WaIcon />הצע #1
+                              </button>
+                              <button
+                                onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 2))}
+                                className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-[#1aab55] text-white text-[11px] font-medium">
+                                <WaIcon />הצע #2
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               );
             })}

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import { getProfile, saveProfile } from '@/lib/storage';
+import PhoneInput from '@/components/PhoneInput';
 
 export default function EditParentPage() {
   const router = useRouter();
@@ -79,14 +80,7 @@ export default function EditParentPage() {
           {/* טלפון */}
           <div>
             <label className="block text-[12px] font-medium text-gray-500 mb-1.5">טלפון</label>
-            <input
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-              placeholder="052-0000000"
-              type="tel"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-[#fafafa]"
-              dir="rtl"
-            />
+            <PhoneInput value={phone} onChange={setPhone} />
           </div>
 
           {/* אמא / אבא */}

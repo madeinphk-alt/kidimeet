@@ -7,6 +7,7 @@ import type { DaySlot, FriendParent, Friend, FriendGroup, UserProfile } from '@/
 import { HEB_DAYS, HEB_DAYS_SINGLE } from '@/lib/utils';
 import DayAvailPicker from '@/components/DayAvailPicker';
 import BottomNav from '@/components/BottomNav';
+import PhoneInput from '@/components/PhoneInput';
 
 const STEPS = ['הילד', 'ההורים', 'זמינות'];
 const DEFAULT_PARENT: FriendParent = { name: '', phone: '', role: 'mom', custodyDays: [] };
@@ -330,14 +331,12 @@ function AddFriendForm() {
               </div>
 
               <label className="block text-[12px] font-medium text-gray-500 mb-1.5">טלפון</label>
-              <input
-                value={parents[0].phone}
-                onChange={e => updateParent(0, 'phone', e.target.value)}
-                placeholder="052-0000000"
-                type="tel"
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] text-right mb-3 focus:outline-none focus:border-[#534AB7] bg-white"
-                dir="rtl"
-              />
+              <div className="mb-3">
+                <PhoneInput
+                  value={parents[0].phone}
+                  onChange={v => updateParent(0, 'phone', v)}
+                />
+              </div>
 
               <div className="grid grid-cols-2 gap-2 mb-3">
                 {(['mom', 'dad'] as const).map(r => (
@@ -437,14 +436,12 @@ function AddFriendForm() {
                   </div>
 
                   <label className="block text-[12px] font-medium text-gray-500 mb-1.5">טלפון</label>
-                  <input
-                    value={parents[1]?.phone ?? ''}
-                    onChange={e => updateParent(1, 'phone', e.target.value)}
-                    placeholder="052-0000000"
-                    type="tel"
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] text-right mb-3 focus:outline-none focus:border-[#534AB7] bg-white"
-                    dir="rtl"
-                  />
+                  <div className="mb-3">
+                    <PhoneInput
+                      value={parents[1]?.phone ?? ''}
+                      onChange={v => updateParent(1, 'phone', v)}
+                    />
+                  </div>
 
                   <div className="grid grid-cols-2 gap-2 mb-3">
                     {(['mom', 'dad'] as const).map(r => (

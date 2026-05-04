@@ -186,7 +186,7 @@ export default function MeetupsPage() {
       location: host === 'us' ? 'אצלנו' : host === 'them' ? `אצל ${friend.name.split(' ')[0]}` : '',
       notes: '',
       status: 'confirmed',
-      host,
+      host: host === 'other' ? undefined : host,
     };
     savePlannedMeetup(meetup);
     setMeetups(getPlannedMeetups());
@@ -273,7 +273,7 @@ export default function MeetupsPage() {
                   className={clsx('flex-1 py-2 rounded-xl text-[12px] font-medium',
                     status === 'waiting' ? 'bg-amber-100 text-amber-600 border border-amber-300' : 'bg-gray-50 text-gray-500 border border-gray-200'
                   )}>⏳ ממתין</button>
-                <button onClick={() => proposePlaydate(friend, getHostPick(friend.id, dateStr) ?? 'us', date, dateStr)}
+                <button onClick={() => { const h = getHostPick(friend.id, dateStr); proposePlaydate(friend, h === 'other' || !h ? 'us' : h, date, dateStr); }}
                   className="flex-1 py-2 rounded-xl text-[12px] font-medium bg-gray-50 text-gray-500 border border-gray-200">🔁 הקפץ</button>
                 <button onClick={() => setProposal(friend.id, dateStr, 'skipped')}
                   className="flex-1 py-2 rounded-xl text-[12px] font-medium bg-gray-50 text-red-400 border border-gray-200">✕ לא הפעם</button>

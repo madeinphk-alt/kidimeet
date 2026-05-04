@@ -138,11 +138,19 @@ export default function MeetupsPage() {
     return { offset: i, dow: d.getDay(), date: d };
   });
 
+  // ── Responsible parent for a given day ───────────────────────────────────
+  const getResponsibleParent = (friend: Friend, dow: number) => {
+    if (friend.parents.length <= 1) return friend.parents[0] ?? null;
+    const byDay = friend.parents.find(p => p.custodyDays.length > 0 && p.custodyDays.includes(dow));
+    if (byDay) return byDay;
+    const always = friend.parents.find(p => p.custodyDays.length === 0);
+    return always ?? friend.parents[0];
+  };
+
   // ── Propose playdate ──────────────────────────────────────────────────────
-  const buildProposeMsg = (friend: Friend, host: 'us' | 'them' | 'other', date: Date, variant: 1 | 2): string => {
-    const parent      = friend.parents[0];
+  const buildProposeMsg = (friend: Friend, parent: { name: string; phone: string }, host: 'us' | 'them' | 'other', date: Date, variant: 1 | 2): string => {
     const myChild     = profile ? getActiveChild(profile).name.split(' ')[0] : '';
-    const parentFirst = parent.name.split(' ')[0];
+    const parentFirst = parent?.name.split(' ')[0] ?? '';
     const friendFirst = friend.name.split(' ')[0];
     const dateLabel   = `יום ${HEB_DAYS[date.getDay()]} ${date.getDate()} ב${HEB_MONTHS[date.getMonth()]}`;
     const dow  = date.getDay();
@@ -162,10 +170,9 @@ export default function MeetupsPage() {
     }
   };
 
-  const proposePlaydate = (friend: Friend, host: 'us' | 'them' | 'other', date: Date, dateStr: string, variant: 1 | 2 = 1) => {
-    const parent = friend.parents[0];
+  const proposePlaydate = (friend: Friend, parent: { name: string; phone: string }, host: 'us' | 'them' | 'other', date: Date, dateStr: string, variant: 1 | 2 = 1) => {
     if (!parent?.phone) return;
-    const msg = buildProposeMsg(friend, host, date, variant);
+    const msg = buildProposeMsg(friend, parent, host, date, variant);
     window.open(`https://wa.me/${formatWaPhone(parent.phone)}?text=${encodeURIComponent(msg)}`, '_blank');
     setProposal(friend.id, dateStr, 'suggested');
   };
@@ -212,7 +219,8 @@ export default function MeetupsPage() {
         const slotLabel  = slot?.afternoon ? `אחה"צ ${formatTime(slot.afternoonFrom)}`
           : slot?.noon ? `צהרים ${formatTime(slot.noonFrom)}`
           : slot?.morning ? `בוקר ${formatTime(slot.morningFrom)}` : '';
-        const canPropose = !!pickedHost && !!friend.parents[0]?.phone;
+        const responsibleParent = getResponsibleParent(friend, dow);
+        const canPropose = !!pickedHost && !!responsibleParent?.phone;
         const firstName  = friend.name.split(' ')[0];
         const isSkipped  = status === 'skipped';
         return (
@@ -258,24 +266,25 @@ export default function MeetupsPage() {
                 <div className="border-t border-[#f0eef8] px-3 py-2 flex gap-2" dir="rtl">
                   {(() => {
                     const h = pickedHost ?? 'us';
-                    const parentFirst = friend.parents[0]?.name.split(' ')[0] ?? firstName;
+                    const rp = responsibleParent;
+                    const rpFirst = rp?.name.split(' ')[0] ?? firstName;
                     return (
                       <>
                         <button disabled={!canPropose}
-                          onClick={() => canPropose && window.open(`https://wa.me/${formatWaPhone(friend.parents[0]?.phone ?? '')}`, '_blank')}
+                          onClick={() => canPropose && rp && window.open(`https://wa.me/${formatWaPhone(rp.phone)}`, '_blank')}
                           className={clsx('flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium shrink-0',
                             canPropose ? 'bg-gray-50 border border-gray-200 text-gray-600' : 'bg-gray-50 border border-gray-200 text-gray-300'
                           )}>
                           <span className={canPropose ? 'text-[#25D366]' : 'text-gray-300'}><WaIcon /></span>
-                          הצע ל{parentFirst}
+                          הצע ל{rpFirst}
                         </button>
                         <button disabled={!canPropose}
-                          onClick={() => canPropose && proposePlaydate(friend, h, date, dateStr, 1)}
+                          onClick={() => canPropose && rp && proposePlaydate(friend, rp, h, date, dateStr, 1)}
                           className={clsx('px-2.5 py-1.5 rounded-lg text-[11px] font-medium',
                             canPropose ? 'bg-[#25D366] text-white' : 'bg-[#25D366] text-white opacity-35'
                           )}>נוסח #1</button>
                         <button disabled={!canPropose}
-                          onClick={() => canPropose && proposePlaydate(friend, h, date, dateStr, 2)}
+                          onClick={() => canPropose && rp && proposePlaydate(friend, rp, h, date, dateStr, 2)}
                           className={clsx('px-2.5 py-1.5 rounded-lg text-[11px] font-medium',
                             canPropose ? 'bg-[#1aab55] text-white' : 'bg-[#1aab55] text-white opacity-35'
                           )}>נוסח #2</button>
@@ -291,7 +300,7 @@ export default function MeetupsPage() {
                   className={clsx('flex-1 py-2 rounded-xl text-[12px] font-medium',
                     status === 'waiting' ? 'bg-amber-100 text-amber-600 border border-amber-300' : 'bg-gray-50 text-gray-500 border border-gray-200'
                   )}>⏳ ממתין</button>
-                <button onClick={() => { const h = getHostPick(friend.id, dateStr); proposePlaydate(friend, h === 'other' || !h ? 'us' : h, date, dateStr); }}
+                <button onClick={() => { const h = getHostPick(friend.id, dateStr) ?? 'us'; if (responsibleParent) proposePlaydate(friend, responsibleParent, h, date, dateStr); }}
                   className="flex-1 py-2 rounded-xl text-[12px] font-medium bg-gray-50 text-gray-500 border border-gray-200">🔁 הקפץ</button>
                 <button onClick={() => setProposal(friend.id, dateStr, 'skipped')}
                   className="flex-1 py-2 rounded-xl text-[12px] font-medium bg-gray-50 text-red-400 border border-gray-200">✕ לא הפעם</button>

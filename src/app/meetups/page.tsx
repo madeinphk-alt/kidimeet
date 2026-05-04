@@ -55,7 +55,7 @@ export default function MeetupsPage() {
   const [profile,    setProfile]    = useState<UserProfile | null>(null);
   const [offset,     setOffset]     = useState(0);
   const [proposals,  setProposals]  = useState<Map<string, 'suggested' | 'waiting' | 'skipped' | 'confirmed'>>(new Map());
-  const [hostPick,   setHostPick]   = useState<Map<string, 'us' | 'them'>>(new Map());
+  const [hostPick,   setHostPick]   = useState<Map<string, 'us' | 'them' | 'other'>>(new Map());
 
   useEffect(() => {
     setMeetups(getPlannedMeetups());
@@ -102,7 +102,7 @@ export default function MeetupsPage() {
     });
   };
   const getHostPick = (fid: string, dateStr: string) => hostPick.get(pKey(fid, dateStr));
-  const setHostFor  = (fid: string, dateStr: string, h: 'us' | 'them') =>
+  const setHostFor  = (fid: string, dateStr: string, h: 'us' | 'them' | 'other') =>
     setHostPick(m => new Map(m).set(pKey(fid, dateStr), h));
 
   // ── Available friends for a given day ────────────────────────────────────
@@ -231,21 +231,36 @@ export default function MeetupsPage() {
               </div>
             )}
             {!status && (
-              <div className="px-3 pb-3 flex gap-2">
-                <button onClick={() => setHostFor(friend.id, dateStr, 'us')}
-                  className={clsx('flex-1 py-2 rounded-xl border text-[12px] font-medium transition-colors',
-                    pickedHost === 'us' ? 'bg-[#534AB7] border-[#534AB7] text-white' : 'bg-white border-gray-200 text-gray-500'
-                  )}>🏠 אצלנו</button>
-                <button onClick={() => setHostFor(friend.id, dateStr, 'them')}
-                  className={clsx('flex-1 py-2 rounded-xl border text-[12px] font-medium transition-colors',
-                    pickedHost === 'them' ? 'bg-[#534AB7] border-[#534AB7] text-white' : 'bg-white border-gray-200 text-gray-500'
-                  )}>🚶 אצלהם</button>
-                <button disabled={!canPropose}
-                  onClick={() => canPropose && proposePlaydate(friend, pickedHost!, date, dateStr)}
-                  className={clsx('flex-[1.4] flex items-center justify-center gap-1.5 py-2 rounded-xl text-[13px] font-semibold',
-                    canPropose ? 'bg-[#25D366] text-white' : 'bg-[#25D366] text-white opacity-35'
-                  )}><WaIcon />הצע</button>
-              </div>
+              <>
+                {/* שורה 1: בחירת מיקום */}
+                <div className="px-3 pb-2 flex gap-2" dir="rtl">
+                  <button onClick={() => setHostFor(friend.id, dateStr, 'us')}
+                    className={clsx('flex-1 py-2 rounded-xl border text-[12px] font-medium transition-colors',
+                      pickedHost === 'us' ? 'bg-[#534AB7] border-[#534AB7] text-white' : 'bg-white border-gray-200 text-gray-500'
+                    )}>🏠 אצלנו</button>
+                  <button onClick={() => setHostFor(friend.id, dateStr, 'them')}
+                    className={clsx('flex-1 py-2 rounded-xl border text-[12px] font-medium transition-colors',
+                      pickedHost === 'them' ? 'bg-[#534AB7] border-[#534AB7] text-white' : 'bg-white border-gray-200 text-gray-500'
+                    )}>🚶 אצלהם</button>
+                  <button onClick={() => setHostFor(friend.id, dateStr, 'other')}
+                    className={clsx('flex-1 py-2 rounded-xl border text-[12px] font-medium transition-colors',
+                      pickedHost === 'other' ? 'bg-[#534AB7] border-[#534AB7] text-white' : 'bg-white border-gray-200 text-gray-500'
+                    )}>📍 אחר</button>
+                </div>
+                {/* שורה 2: הצעה */}
+                <div className="border-t border-[#f0eef8] px-3 py-2 flex gap-2" dir="rtl">
+                  <button disabled={!canPropose}
+                    onClick={() => canPropose && proposePlaydate(friend, pickedHost === 'other' ? 'us' : pickedHost!, date, dateStr)}
+                    className={clsx('flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-colors',
+                      canPropose
+                        ? 'bg-gray-50 border border-gray-200 text-gray-600'
+                        : 'bg-gray-50 border border-gray-200 text-gray-300'
+                    )}>
+                    <span className={canPropose ? 'text-[#25D366]' : 'text-gray-300'}><WaIcon /></span>
+                    הצע ל{firstName}
+                  </button>
+                </div>
+              </>
             )}
             {(status === 'suggested' || status === 'waiting') && (
               <div className="border-t border-[#f0eef8] px-3 py-2.5 flex gap-1.5">

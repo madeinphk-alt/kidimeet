@@ -147,9 +147,9 @@ export default function FriendsPage() {
 
                   {/* ── שורה 1: הודעות + פרופיל ──────────────────────────── */}
                   <div className="border-t border-[#f0eef8] px-3 py-2.5 flex gap-2" dir="rtl">
-                    {profile && friend.parents.filter(p => p.phone).map((p, i) => (
+                    {friend.parents.filter(p => p.phone).map((p, i) => (
                       <button key={i}
-                        onClick={() => openWa(p.phone, buildAvailMsg(friend, p))}
+                        onClick={() => window.open(`https://wa.me/${formatWaPhone(p.phone)}`, '_blank')}
                         className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-[11px] text-gray-600">
                         <span className="text-[#25D366]"><WaIcon /></span>
                         הודעה ל{p.name.split(' ')[0]}

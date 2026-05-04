@@ -164,13 +164,13 @@ export default function FriendsPage() {
                             <>
                               <button
                                 onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 1))}
-                                className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-[#25D366] text-white text-[11px] font-medium">
-                                <WaIcon />הצע #1
+                                className="px-2 py-1.5 rounded-lg bg-[#25D366] text-white text-[11px] font-medium">
+                                נוסח #1
                               </button>
                               <button
                                 onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 2))}
-                                className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-[#1aab55] text-white text-[11px] font-medium">
-                                <WaIcon />הצע #2
+                                className="px-2 py-1.5 rounded-lg bg-[#1aab55] text-white text-[11px] font-medium">
+                                נוסח #2
                               </button>
                             </>
                           )}

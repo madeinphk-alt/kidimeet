@@ -185,10 +185,10 @@ export default function FriendsPage() {
         )}
       </main>
 
-      <div className="px-4 py-2.5 bg-[#f7f6fb] border-t border-[#e8e5f5]">
+      <div className="px-3 pb-2 bg-[#f7f6fb]">
         <Link
           href="/friends/add"
-          className="block w-full bg-[#534AB7] text-white text-[15px] font-medium text-center py-3 rounded-xl"
+          className="block w-full text-center bg-white border border-[#e0ddf0] text-[#534AB7] text-[13px] font-medium py-2.5 rounded-xl active:opacity-70"
         >
           + הוסף חבר.ה
         </Link>

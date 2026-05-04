@@ -70,29 +70,18 @@ export default function FriendsPage() {
   const openWa = (phone: string, msg: string) =>
     window.open(`https://wa.me/${formatWaPhone(phone)}?text=${encodeURIComponent(msg)}`, '_blank');
 
-  const buildAvailMsg = (friend: Friend, parent: { name: string; phone: string }): string => {
-    if (!profile) return '';
-    const vars = {
-      parentFirst: parent.name.split(' ')[0],
-      myName:      profile.parent.name,
-      myChild:     getActiveChild(profile).name,
-      friendName:  friend.name.split(' ')[0],
-      role:        profile.parent.role === 'mom' ? 'אמא' : 'אבא',
-    };
-    return applyMsgTemplate(getMsgTemplates().initial, vars);
-  };
+  const buildVars = (friend: Friend, parent: { name: string; phone: string }) => ({
+    parentFirst: parent.name.split(' ')[0],
+    myName:      profile?.parent.name.split(' ')[0] ?? '',
+    myChild:     getActiveChild(profile!).name.split(' ')[0],
+    friendName:  friend.name.split(' ')[0],
+    role:        profile?.parent.role === 'mom' ? 'אמא' : 'אבא',
+  });
 
   const buildProposeMsg = (friend: Friend, parent: { name: string; phone: string }, variant: 1 | 2 = 1): string => {
     if (!profile) return '';
-    const vars = {
-      parentFirst: parent.name.split(' ')[0],
-      myName:      profile.parent.name,
-      myChild:     getActiveChild(profile).name,
-      friendName:  friend.name.split(' ')[0],
-      role:        profile.parent.role === 'mom' ? 'אמא' : 'אבא',
-    };
     const tpl = variant === 2 ? getMsgTemplates().propose2 : getMsgTemplates().propose1;
-    return applyMsgTemplate(tpl, vars);
+    return applyMsgTemplate(tpl, buildVars(friend, parent));
   };
 
   return (
@@ -161,28 +150,22 @@ export default function FriendsPage() {
                     </Link>
                   </div>
 
-                  {/* ── שורה 2: הצעות פליידייט ───────────────────────────── */}
-                  {profile && friend.parents.filter(p => p.phone).length > 0 && (
-                    <div className="border-t border-[#f0eef8] px-3 py-2.5 flex gap-2" dir="rtl">
-                      {friend.parents.filter(p => p.phone).map((p, i) => {
-                        const showName = friend.parents.filter(p => p.phone).length > 1;
-                        return (
-                          <>
-                            <button key={`p1-${i}`}
-                              onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 1))}
-                              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#25D366] text-white text-[11px] font-medium">
-                              <WaIcon />הצע #1{showName ? ` ל${p.name.split(' ')[0]}` : ''}
-                            </button>
-                            <button key={`p2-${i}`}
-                              onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 2))}
-                              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#1aab55] text-white text-[11px] font-medium">
-                              <WaIcon />הצע #2{showName ? ` ל${p.name.split(' ')[0]}` : ''}
-                            </button>
-                          </>
-                        );
-                      })}
+                  {/* ── שורה לכל הורה: הצעות פליידייט ──────────────────── */}
+                  {profile && friend.parents.filter(p => p.phone).map((p, i) => (
+                    <div key={`propose-${i}`} className="border-t border-[#f0eef8] px-3 py-2 flex items-center gap-2" dir="rtl">
+                      <span className="text-[11px] text-gray-400 shrink-0">{p.name.split(' ')[0]}:</span>
+                      <button
+                        onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 1))}
+                        className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#25D366] text-white text-[11px] font-medium">
+                        <WaIcon />הצע #1
+                      </button>
+                      <button
+                        onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 2))}
+                        className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#1aab55] text-white text-[11px] font-medium">
+                        <WaIcon />הצע #2
+                      </button>
                     </div>
-                  )}
+                  ))}
                 </div>
               );
             })}

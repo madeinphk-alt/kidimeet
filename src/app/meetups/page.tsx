@@ -142,23 +142,28 @@ export default function MeetupsPage() {
   const proposePlaydate = (friend: Friend, host: 'us' | 'them', date: Date, dateStr: string) => {
     const parent = friend.parents[0];
     if (!parent?.phone) return;
-    const myName  = profile?.parent?.name ?? '';
-    const myChild = profile ? getActiveChild(profile).name : '';
-    const role    = profile?.parent?.role === 'mom' ? 'אמא' : 'אבא';
+    const myChild     = profile ? getActiveChild(profile).name.split(' ')[0] : '';
     const parentFirst = parent.name.split(' ')[0];
+    const friendFirst = friend.name.split(' ')[0];
     const dateLabel   = `יום ${HEB_DAYS[date.getDay()]} ${date.getDate()} ב${HEB_MONTHS[date.getMonth()]}`;
     const dow  = date.getDay();
     const slot = friend.availability[dow];
-    const timeHint = slot?.afternoon
-      ? `${formatTime(slot.afternoonFrom)}–${formatTime(slot.afternoonTo)}`
-      : slot?.noon ? `${formatTime(slot.noonFrom)}–${formatTime(slot.noonTo)}`
-      : slot?.morning ? `${formatTime(slot.morningFrom)}–${formatTime(slot.morningTo)}` : '';
-    const hostLine = host === 'us' ? `📍 אצלנו בבית` : `📍 נשמח לבוא אליכם`;
+    const timeHint = slot?.afternoon ? `אחה"צ ${formatTime(slot.afternoonFrom)}`
+      : slot?.noon    ? `צהריים ${formatTime(slot.noonFrom)}`
+      : slot?.morning ? `בוקר ${formatTime(slot.morningFrom)}` : '';
+
+    const prevHost = lastMetHost(friend.id);
+    const prevLine = prevHost
+      ? `פעם אחרונה היה ${prevHost === 'us' ? 'אצלנו' : 'אצלכם'}, אולי ${host === 'us' ? 'אצלנו' : 'אצלכם'} הפעם?`
+      : host === 'us' ? 'חשבנו לארח אצלנו 🙂' : 'נשמח לבוא אליכם 🙂';
+
     const msg =
-      `היי ${parentFirst} 👋 זה ${myName} ${role} של ${myChild}\n` +
-      `חשבנו לקבוע פלייידייט ל${friend.name.split(' ')[0]} ו${myChild} 😊\n` +
-      `📅 ${dateLabel}${timeHint ? ` · ${timeHint}` : ''}\n${hostLine}\n\n` +
-      `מה ${friend.name.split(' ')[0]} אומר?\nKidiMeet · www.KidiMeet.co.il`;
+      `היי ${parentFirst} 👋\n` +
+      `חשבנו ש${friendFirst} ו${myChild} אולי ירצו להיפגש\n` +
+      `ב- ${dateLabel}${timeHint ? ` ${timeHint}` : ''}\n` +
+      `${prevLine}\n\n` +
+      `מה דעתכם?`;
+
     window.open(`https://wa.me/${formatWaPhone(parent.phone)}?text=${encodeURIComponent(msg)}`, '_blank');
     setProposal(friend.id, dateStr, 'suggested');
   };

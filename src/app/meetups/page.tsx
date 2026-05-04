@@ -139,31 +139,32 @@ export default function MeetupsPage() {
   });
 
   // ── Propose playdate ──────────────────────────────────────────────────────
-  const proposePlaydate = (friend: Friend, host: 'us' | 'them', date: Date, dateStr: string) => {
-    const parent = friend.parents[0];
-    if (!parent?.phone) return;
+  const buildProposeMsg = (friend: Friend, host: 'us' | 'them', date: Date, variant: 1 | 2): string => {
+    const parent      = friend.parents[0];
     const myChild     = profile ? getActiveChild(profile).name.split(' ')[0] : '';
     const parentFirst = parent.name.split(' ')[0];
     const friendFirst = friend.name.split(' ')[0];
     const dateLabel   = `יום ${HEB_DAYS[date.getDay()]} ${date.getDate()} ב${HEB_MONTHS[date.getMonth()]}`;
     const dow  = date.getDay();
     const slot = friend.availability[dow];
-    const timeHint = slot?.afternoon ? `אחה"צ`
-      : slot?.noon    ? `צהריים`
-      : slot?.morning ? `בוקר` : '';
-
+    const timeHint = slot?.afternoon ? `אחה"צ` : slot?.noon ? `צהריים` : slot?.morning ? `בוקר` : '';
     const prevHost = lastMetHost(friend.id);
-    const prevLine = prevHost
-      ? `פעם אחרונה היה ${prevHost === 'us' ? 'אצלנו' : 'אצלכם'}, אולי ${host === 'us' ? 'אצלנו' : 'אצלכם'} הפעם?`
-      : host === 'us' ? 'חשבנו לארח אצלנו 🙂' : 'נשמח לבוא אליכם 🙂';
 
-    const msg =
-      `היי ${parentFirst} 👋\n` +
-      `חשבנו ש${friendFirst} ו${myChild} אולי ירצו להיפגש\n` +
-      `ב- ${dateLabel}${timeHint ? ` ${timeHint}` : ''}\n` +
-      `${prevLine}\n\n` +
-      `מה דעתכם?`;
+    if (variant === 1) {
+      const prevLine = prevHost
+        ? `פעם אחרונה היה ${prevHost === 'us' ? 'אצלנו' : 'אצלכם'}, אולי ${host === 'us' ? 'אצלנו' : 'אצלכם'} הפעם?`
+        : host === 'us' ? 'חשבנו לארח אצלנו 🙂' : 'נשמח לבוא אליכם 🙂';
+      return `היי ${parentFirst} 👋\nחשבנו ש${friendFirst} ו${myChild} אולי ירצו להיפגש\nב- ${dateLabel}${timeHint ? ` ${timeHint}` : ''}\n${prevLine}\n\nמה דעתכם?`;
+    } else {
+      const hostShort = host === 'us' ? 'אצלנו' : 'אצלכם';
+      return `היי ${parentFirst} 😊\n${friendFirst} ו${myChild} רוצים להיפגש\n${dateLabel}${timeHint ? ` · ${timeHint}` : ''} · ${hostShort}\n\nמה אומרים?`;
+    }
+  };
 
+  const proposePlaydate = (friend: Friend, host: 'us' | 'them', date: Date, dateStr: string, variant: 1 | 2 = 1) => {
+    const parent = friend.parents[0];
+    if (!parent?.phone) return;
+    const msg = buildProposeMsg(friend, host, date, variant);
     window.open(`https://wa.me/${formatWaPhone(parent.phone)}?text=${encodeURIComponent(msg)}`, '_blank');
     setProposal(friend.id, dateStr, 'suggested');
   };
@@ -254,16 +255,32 @@ export default function MeetupsPage() {
                 </div>
                 {/* שורה 2: הצעה */}
                 <div className="border-t border-[#f0eef8] px-3 py-2 flex gap-2" dir="rtl">
-                  <button disabled={!canPropose}
-                    onClick={() => canPropose && proposePlaydate(friend, pickedHost === 'other' ? 'us' : pickedHost!, date, dateStr)}
-                    className={clsx('flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-colors',
-                      canPropose
-                        ? 'bg-gray-50 border border-gray-200 text-gray-600'
-                        : 'bg-gray-50 border border-gray-200 text-gray-300'
-                    )}>
-                    <span className={canPropose ? 'text-[#25D366]' : 'text-gray-300'}><WaIcon /></span>
-                    הצע ל{firstName}
-                  </button>
+                  {(() => {
+                    const h = pickedHost === 'other' || !pickedHost ? 'us' : pickedHost;
+                    const parentFirst = friend.parents[0]?.name.split(' ')[0] ?? firstName;
+                    return (
+                      <>
+                        <button disabled={!canPropose}
+                          onClick={() => canPropose && window.open(`https://wa.me/${formatWaPhone(friend.parents[0]?.phone ?? '')}`, '_blank')}
+                          className={clsx('flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium shrink-0',
+                            canPropose ? 'bg-gray-50 border border-gray-200 text-gray-600' : 'bg-gray-50 border border-gray-200 text-gray-300'
+                          )}>
+                          <span className={canPropose ? 'text-[#25D366]' : 'text-gray-300'}><WaIcon /></span>
+                          הצע ל{parentFirst}
+                        </button>
+                        <button disabled={!canPropose}
+                          onClick={() => canPropose && proposePlaydate(friend, h, date, dateStr, 1)}
+                          className={clsx('px-2.5 py-1.5 rounded-lg text-[11px] font-medium',
+                            canPropose ? 'bg-[#25D366] text-white' : 'bg-[#25D366] text-white opacity-35'
+                          )}>נוסח #1</button>
+                        <button disabled={!canPropose}
+                          onClick={() => canPropose && proposePlaydate(friend, h, date, dateStr, 2)}
+                          className={clsx('px-2.5 py-1.5 rounded-lg text-[11px] font-medium',
+                            canPropose ? 'bg-[#1aab55] text-white' : 'bg-[#1aab55] text-white opacity-35'
+                          )}>נוסח #2</button>
+                      </>
+                    );
+                  })()}
                 </div>
               </>
             )}

@@ -41,7 +41,7 @@ export default function PhoneInput({ value, onChange, placeholder = '052-0000000
         <button
           type="button"
           onClick={pickContact}
-          className="w-[18%] shrink-0 flex items-center justify-center bg-[#EEEDFE] border border-[#c5c0f0] rounded-xl text-[18px] active:bg-[#534AB7] transition-colors"
+          className="w-10 h-10 shrink-0 flex items-center justify-center bg-[#EEEDFE] border border-[#c5c0f0] rounded-xl text-[16px] active:bg-[#534AB7] transition-colors"
           title="בחר מאנשי קשר"
         >
           👥
@@ -52,7 +52,7 @@ export default function PhoneInput({ value, onChange, placeholder = '052-0000000
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
         type="tel"
-        className={`flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white ${className}`}
+        className={`w-[72%] border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white ${className}`}
         dir="rtl"
       />
     </div>

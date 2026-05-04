@@ -148,9 +148,9 @@ export default function MeetupsPage() {
     const dateLabel   = `יום ${HEB_DAYS[date.getDay()]} ${date.getDate()} ב${HEB_MONTHS[date.getMonth()]}`;
     const dow  = date.getDay();
     const slot = friend.availability[dow];
-    const timeHint = slot?.afternoon ? `אחה"צ ${formatTime(slot.afternoonFrom)}`
-      : slot?.noon    ? `צהריים ${formatTime(slot.noonFrom)}`
-      : slot?.morning ? `בוקר ${formatTime(slot.morningFrom)}` : '';
+    const timeHint = slot?.afternoon ? `אחה"צ`
+      : slot?.noon    ? `צהריים`
+      : slot?.morning ? `בוקר` : '';
 
     const prevHost = lastMetHost(friend.id);
     const prevLine = prevHost

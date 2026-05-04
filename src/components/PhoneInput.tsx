@@ -36,7 +36,17 @@ export default function PhoneInput({ value, onChange, placeholder = '052-0000000
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2" dir="rtl">
+      {supported && (
+        <button
+          type="button"
+          onClick={pickContact}
+          className="w-[18%] shrink-0 flex items-center justify-center bg-[#EEEDFE] border border-[#c5c0f0] rounded-xl text-[18px] active:bg-[#534AB7] transition-colors"
+          title="בחר מאנשי קשר"
+        >
+          👥
+        </button>
+      )}
       <input
         value={value}
         onChange={e => onChange(e.target.value)}
@@ -45,16 +55,6 @@ export default function PhoneInput({ value, onChange, placeholder = '052-0000000
         className={`flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] text-right focus:outline-none focus:border-[#534AB7] bg-white ${className}`}
         dir="rtl"
       />
-      {supported && (
-        <button
-          type="button"
-          onClick={pickContact}
-          className="w-[22%] shrink-0 flex items-center justify-center bg-[#EEEDFE] border border-[#c5c0f0] rounded-xl text-[20px] active:bg-[#534AB7] transition-colors"
-          title="בחר מאנשי קשר"
-        >
-          📇
-        </button>
-      )}
     </div>
   );
 }

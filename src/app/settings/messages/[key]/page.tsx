@@ -7,6 +7,8 @@ import type { MessageTemplates } from '@/lib/storage';
 
 const FIXED_LABELS: Record<keyof MessageTemplates, string> = {
   initial:  'פנייה ראשונית',
+  initial2: 'הודעה #2 — כתובת',
+  initial3: 'הודעה #3 — פרטים נוספים',
   propose1: 'אצלנו.כם',
   propose2: 'הזמנה#1',
 };

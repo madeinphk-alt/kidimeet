@@ -5,9 +5,11 @@ import { getMsgTemplates, getCustomTemplates, deleteCustomTemplate } from '@/lib
 import type { MessageTemplates, CustomTemplate } from '@/lib/storage';
 
 const FIXED_DEFS: { key: keyof MessageTemplates; label: string; desc: string }[] = [
-  { key: 'initial',  label: 'פנייה ראשונית',      desc: 'היכרות ובקשת זמינות' },
-  { key: 'propose1', label: 'אצלנו.כם',  desc: 'הצעת מפגש עם בחירת מיקום' },
-  { key: 'propose2', label: 'הזמנה#1',  desc: 'הזמנה פתוחה — אצלנו או אצלכם' },
+  { key: 'initial',  label: 'הודעה #1 — ימים פנויים',    desc: 'בקשת זמינות וכל הפרטים' },
+  { key: 'initial2', label: 'הודעה #2 — כתובת',          desc: 'בקשת כתובת ופרטי כניסה' },
+  { key: 'initial3', label: 'הודעה #3 — פרטים נוספים',   desc: 'בקשת פרטים חשובים על הילד' },
+  { key: 'propose1', label: 'אצלנו.כם',                  desc: 'הצעת מפגש עם בחירת מיקום' },
+  { key: 'propose2', label: 'הזמנה#1',                   desc: 'הזמנה פתוחה — אצלנו או אצלכם' },
 ];
 
 export default function MessagesPage() {

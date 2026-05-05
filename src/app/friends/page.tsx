@@ -117,11 +117,12 @@ export default function FriendsPage() {
         ) : (
           <div className="flex flex-col gap-2">
             {activeFriends.map(friend => {
-              const fFirst      = friend.name.split(' ')[0];
-              const parentNames = friend.parents.map(p => p.name.split(' ')[0]).join(' ו');
-              const metLabel    = lastMetLabel(friend.id);
-              const hostLabel   = lastMetHostLabel(friend.id);
-              const isUrgent    = !lastMetMap.has(friend.id);
+              const fFirst         = friend.name.split(' ')[0];
+              const parentNames    = friend.parents.map(p => p.name.split(' ')[0]).join(' ו');
+              const metLabel       = lastMetLabel(friend.id);
+              const hostLabel      = lastMetHostLabel(friend.id);
+              const isUrgent       = !lastMetMap.has(friend.id);
+              const hasAvailability = Object.values(friend.availability).some(s => s.active);
 
               return (
                 <div key={friend.id} className="bg-white rounded-xl border border-[#e0ddf0] overflow-hidden" dir="rtl">
@@ -139,6 +140,12 @@ export default function FriendsPage() {
                     <span className={clsx('text-[12px] truncate flex-1', isUrgent ? 'text-orange-500 font-medium' : 'text-gray-400')}>
                       {metLabel}{hostLabel ? ` · ${hostLabel}` : ''}
                     </span>
+                    {!hasAvailability && (
+                      <>
+                        <span className="mx-2 text-gray-200 shrink-0">|</span>
+                        <span className="text-[11px] text-amber-500 font-medium shrink-0">מחכה לפרטים</span>
+                      </>
+                    )}
                     <span className="text-[15px] mr-2 shrink-0">👤</span>
                   </Link>
 

@@ -152,21 +152,24 @@ export default function MeetupsPage() {
     const myChild     = profile ? getActiveChild(profile).name.split(' ')[0] : '';
     const parentFirst = parent?.name.split(' ')[0] ?? '';
     const friendFirst = friend.name.split(' ')[0];
-    const dateLabel   = `יום ${HEB_DAYS[date.getDay()]} ${date.getDate()} ב${HEB_MONTHS[date.getMonth()]}`;
     const dow  = date.getDay();
+    const daysAhead = differenceInDays(date, todayDate);
+    const relLabel = daysAhead === 0 ? 'היום' : daysAhead === 1 ? 'מחר' : daysAhead === 2 ? 'מחרתיים' : null;
+    const absLabel = `יום ${HEB_DAYS[dow]} ${date.getDate()} ב${HEB_MONTHS[date.getMonth()]}`;
+    const dateLabel = relLabel ?? absLabel;
     const slot = friend.availability[dow];
-    const timeHint = slot?.afternoon ? `אחה"צ` : slot?.noon ? `צהריים` : slot?.morning ? `בוקר` : '';
-    const dateLine = `ב${dateLabel}${timeHint ? ` ${timeHint}` : ''}`;
+    const timeHint = slot?.afternoon ? `אחה"צ` : slot?.noon ? `בצהריים` : slot?.morning ? `בבוקר` : '';
+    const dateLine = `${dateLabel}${timeHint ? ` ${timeHint}` : ''}`;
 
     if (variant === 1) {
       const hostLine =
         host === 'us'    ? 'פעם אחרונה היתה אצלכם, אולי הפעם אצלנו?' :
         host === 'them'  ? 'פעם אחרונה היתה אצלנו, אולי הפעם אצלכם?' :
                            'חשבנו אולי להיפגש ב';
-      return `היי ${parentFirst} 👋\nחשבנו ש${friendFirst} ו${myChild} אולי ירצו להיפגש\n${dateLine}\n${hostLine}\nמה דעתכם?\nעדכנו...`;
+      return `היי ${parentFirst} 👋\nחשבנו ש${friendFirst} ו${myChild} אולי ירצו להיפגש ${dateLine}\n${hostLine}\nמה דעתכם?\nעדכנו...`;
     } else {
       const hostShort = host === 'us' ? 'אצלנו' : host === 'them' ? 'אצלכם' : '';
-      return `היי ${parentFirst} 😊\n${friendFirst} ו${myChild} רוצים להיפגש\n${dateLabel}${timeHint ? ` · ${timeHint}` : ''}${hostShort ? ` · ${hostShort}` : ''}\n\nמה אומרים?`;
+      return `היי ${parentFirst} 😊\n${friendFirst} ו${myChild} רוצים להיפגש ${dateLine}${hostShort ? ` · ${hostShort}` : ''}\n\nמה אומרים?`;
     }
   };
 

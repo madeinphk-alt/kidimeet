@@ -343,11 +343,19 @@ export interface MessageTemplates {
 
 // Variables: {שם_הורה} {שם_שלי} {הילד_שלי} {שם_חבר} {תפקיד}
 export const DEFAULT_MSG_TEMPLATES: MessageTemplates = {
-  initial: `היי {שם_הורה} 👋 זה {שם_שלי} {תפקיד} של {הילד_שלי}
-הייתי שמח לעזור לילדים להיפגש לשחק ואשמח אם תגיד לי באלו ימים {שם_חבר} יהיה פנוי לפגוש את {הילד_שלי} 😊
+  initial: `היי {שם_הורה} 👋
+זה {שם_שלי} {תפקיד} של {הילד_שלי}
+הייתי שמח לעזור לילדים להיפגש יותר
+אשמח אם תגידו לי באלו ימים קבועים אתם פנויים לרוב
+כדי שארשום לעצמי ואציע מפגש בימים האלה בעתיד
+מוזמנים גם לכתוב את הכתובת שלכם ואם יש פרטים חשובים
+כדי למצוא את הבית בקלות
+ואם יש פרטים חשובים על {שם_חבר} שאני צריך לדעת
 
-אני עובד עם KidiMeet ואשמח להכניס את {שם_חבר} ללוז מפגשים
-אתה מוזמן גם לנסות 👉 www.KidiMeet.co.il`,
+אני עובד עם אפליקציה שעוזרת לי לתאם יותר מפגשים לילדים שלי
+לכן אשמח שתקדישו להודעה כמה רגעים כדי שנצליח לשמח אותם
+ולנו יהיה קל יותר...
+תודה רבה {שם_הורה}`,
 
   propose1: `היי {שם_הורה} 👋 זה {שם_שלי} {תפקיד} של {הילד_שלי}
 חשבנו לקבוע פליידייט ל{שם_חבר} ו{הילד_שלי} 😊
@@ -363,12 +371,17 @@ KidiMeet · www.KidiMeet.co.il`,
 
 const MSG_TEMPLATES_KEY = 'kidimeet_msg_templates';
 
+const LEGACY_INITIAL_PREFIX = 'היי {שם_הורה} 👋 זה {שם_שלי}';
+
 export function getMsgTemplates(): MessageTemplates {
   if (typeof window === 'undefined') return { ...DEFAULT_MSG_TEMPLATES };
   try {
     const raw = localStorage.getItem(MSG_TEMPLATES_KEY);
     if (!raw) return { ...DEFAULT_MSG_TEMPLATES };
-    return { ...DEFAULT_MSG_TEMPLATES, ...JSON.parse(raw) };
+    const saved = JSON.parse(raw) as Partial<MessageTemplates>;
+    // migrate: if initial template is the old one-liner, reset to new default
+    if (saved.initial?.startsWith(LEGACY_INITIAL_PREFIX)) delete saved.initial;
+    return { ...DEFAULT_MSG_TEMPLATES, ...saved };
   } catch { return { ...DEFAULT_MSG_TEMPLATES }; }
 }
 

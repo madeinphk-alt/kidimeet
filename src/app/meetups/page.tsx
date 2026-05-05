@@ -286,7 +286,7 @@ export default function MeetupsPage() {
                           onClick={() => canPropose && rp && proposePlaydate(friend, rp, h, date, dateStr, 1)}
                           className={clsx('px-2.5 py-1.5 rounded-lg text-[11px] font-medium',
                             canPropose ? 'bg-[#25D366] text-white' : 'bg-[#25D366] text-white opacity-35'
-                          )}>נוסח #1</button>
+                          }>אצלנו.כם</button>
                         <button disabled={!canPropose}
                           onClick={() => canPropose && rp && proposePlaydate(friend, rp, h, date, dateStr, 2)}
                           className={clsx('px-2.5 py-1.5 rounded-lg text-[11px] font-medium',

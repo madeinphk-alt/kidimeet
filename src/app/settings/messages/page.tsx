@@ -6,7 +6,7 @@ import type { MessageTemplates, CustomTemplate } from '@/lib/storage';
 
 const FIXED_DEFS: { key: keyof MessageTemplates; label: string; desc: string }[] = [
   { key: 'initial',  label: 'פנייה ראשונית',      desc: 'היכרות ובקשת זמינות' },
-  { key: 'propose1', label: 'הצעת מפגש נוסח #1',  desc: 'הצעה ישירה לפליידייט' },
+  { key: 'propose1', label: 'אצלנו.כם',  desc: 'הצעת מפגש עם בחירת מיקום' },
   { key: 'propose2', label: 'הצעת מפגש נוסח #2',  desc: 'גרסה קצרה ולא פורמלית' },
 ];
 

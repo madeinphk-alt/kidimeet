@@ -154,8 +154,9 @@ export default function MeetupsPage() {
     const friendFirst = friend.name.split(' ')[0];
     const dow  = date.getDay();
     const daysAhead = differenceInDays(date, todayDate);
-    const relLabel = daysAhead === 0 ? 'היום' : daysAhead === 1 ? 'מחר' : daysAhead === 2 ? 'מחרתיים' : null;
-    const absLabel = `יום ${HEB_DAYS[dow]} ${date.getDate()} ב${HEB_MONTHS[date.getMonth()]}`;
+    const dayName  = `יום ${HEB_DAYS[dow]}`;
+    const relLabel = daysAhead === 0 ? `היום (${dayName})` : daysAhead === 1 ? `מחר (${dayName})` : daysAhead === 2 ? `מחרתיים (${dayName})` : null;
+    const absLabel = `${dayName} ${date.getDate()} ב${HEB_MONTHS[date.getMonth()]}`;
     const dateLabel = relLabel ?? absLabel;
     const slot = friend.availability[dow];
     const timeHint = slot?.afternoon ? `אחה"צ` : slot?.noon ? `בצהריים` : slot?.morning ? `בבוקר` : '';

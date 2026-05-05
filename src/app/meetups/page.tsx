@@ -169,8 +169,7 @@ export default function MeetupsPage() {
                            'חשבנו אולי להיפגש ב';
       return `היי ${parentFirst} 👋\nחשבנו ש${friendFirst} ו${myChild} אולי ירצו להיפגש ${dateLine}\n${hostLine}\nמה דעתכם?\nעדכנו...`;
     } else {
-      const hostShort = host === 'us' ? 'אצלנו' : host === 'them' ? 'אצלכם' : '';
-      return `היי ${parentFirst} 😊\n${friendFirst} ו${myChild} רוצים להיפגש ${dateLine}${hostShort ? ` · ${hostShort}` : ''}\n\nמה אומרים?`;
+      return `היי ${parentFirst} 👋\nחשבנו ש${friendFirst} ו${myChild} אולי ירצו להיפגש ${dateLine}\nאצלנו או אצלכם מה שנוח\nמתאים לכם?\nעדכנו...`;
     }
   };
 
@@ -286,12 +285,12 @@ export default function MeetupsPage() {
                           onClick={() => canPropose && rp && proposePlaydate(friend, rp, h, date, dateStr, 1)}
                           className={clsx('px-2.5 py-1.5 rounded-lg text-[11px] font-medium',
                             canPropose ? 'bg-[#25D366] text-white' : 'bg-[#25D366] text-white opacity-35'
-                          }>אצלנו.כם</button>
+                          )}>אצלנו.כם</button>
                         <button disabled={!canPropose}
                           onClick={() => canPropose && rp && proposePlaydate(friend, rp, h, date, dateStr, 2)}
                           className={clsx('px-2.5 py-1.5 rounded-lg text-[11px] font-medium',
                             canPropose ? 'bg-[#1aab55] text-white' : 'bg-[#1aab55] text-white opacity-35'
-                          )}>נוסח #2</button>
+                          )}>הזמנה#1</button>
                       </>
                     );
                   })()}

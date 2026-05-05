@@ -170,7 +170,7 @@ export default function FriendsPage() {
                               <button
                                 onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 2))}
                                 className="px-2 py-1.5 rounded-lg bg-[#1aab55] text-white text-[11px] font-medium">
-                                נוסח #2
+                                הזמנה#1
                               </button>
                             </>
                           )}

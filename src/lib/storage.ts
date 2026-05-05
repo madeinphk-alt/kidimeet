@@ -352,11 +352,12 @@ export const DEFAULT_MSG_TEMPLATES: MessageTemplates = {
 כדי שארשום לעצמי ואציע מפגש בימים האלה בעתיד
 מוזמנים גם לכתוב את הכתובת שלכם ואם יש פרטים חשובים
 כדי למצוא את הבית בקלות
-ואם יש פרטים חשובים על {שם_חבר} שאני צריך לדעת
+ואם יש פרטים חשובים על {שם_חבר} שאני צריך לדעת תכתבו לי
+
 אני עובד עם אפליקציה שעוזרת לי לתאם יותר מפגשים לילדים שלי
 לכן אשמח שתקדישו להודעה כמה רגעים כדי שנצליח לשמח אותם
-ולנו יהיה קל יותר...
-תודה רבה {שם_הורה}`,
+וגם לנו יהיה יותר קל...
+תודה רבה {שם_שלי}`,
 
   initial2: `היי {שם_הורה} 👋
 {שם_שלי} {תפקיד} של {הילד_שלי}
@@ -395,6 +396,8 @@ export function getMsgTemplates(): MessageTemplates {
     const saved = JSON.parse(raw) as Partial<MessageTemplates>;
     // migrate: if initial template is the old one-liner, reset to new default
     if (saved.initial?.startsWith(LEGACY_INITIAL_PREFIX)) delete saved.initial;
+    // migrate: if initial template is missing "תכתבו לי", it's an older version — reset
+    if (saved.initial && !saved.initial.includes('תכתבו לי')) delete saved.initial;
     return { ...DEFAULT_MSG_TEMPLATES, ...saved };
   } catch { return { ...DEFAULT_MSG_TEMPLATES }; }
 }

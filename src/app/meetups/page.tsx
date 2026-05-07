@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import { addDays, format, differenceInDays } from 'date-fns';
-import { getPlannedMeetups, savePlannedMeetup, getFriends, getProfile, getActiveChild, formatTime } from '@/lib/storage';
+import { getPlannedMeetups, savePlannedMeetup, getFriends, getProfile, getActiveChild, formatTime, MEETUP_TYPE_DEFS } from '@/lib/storage';
 import type { PlannedMeetup, Friend, UserProfile } from '@/lib/storage';
 import { AVATAR_COLORS } from '@/lib/utils';
 import BottomNav from '@/components/BottomNav';
@@ -67,6 +67,12 @@ export default function MeetupsPage() {
   const todayDate = new Date();
   todayDate.setHours(0, 0, 0, 0);
   const todayStr = format(todayDate, 'yyyy-MM-dd');
+
+  // ── Future / past split ───────────────────────────────────────────────────
+  const futureMeetups = meetups.filter(m => m.date >= todayStr);
+  const pastMeetups   = meetups
+    .filter(m => m.date < todayStr)
+    .sort((a, b) => b.date.localeCompare(a.date));
 
   // ── Last-met calculation ──────────────────────────────────────────────────
   const lastMetMap = new Map<string, { date: string; host?: 'us' | 'them' }>();
@@ -386,12 +392,10 @@ export default function MeetupsPage() {
         {/* Friend list */}
         <div className="px-3 pt-3 pb-4">
           {friends.length === 0 ? (
-            <Link href="/friends/add" className="block bg-[#534AB7] rounded-xl px-5 py-5 text-center active:opacity-80" dir="rtl">
-              <p className="text-white text-[15px] font-semibold leading-relaxed">
-                אין לכם עדיין מפגשים,<br />הוסיפו חברים וצרו מפגשים משמחים
-              </p>
-              <p className="text-white/60 text-[12px] mt-2">לחץ להוסיף חבר ראשון ←</p>
-            </Link>
+            <div className="bg-white rounded-xl border border-[#e0ddf0] p-5 text-center" dir="rtl">
+              <p className="text-gray-400 text-[14px] mb-2">עדיין אין חברים ברשימה</p>
+              <Link href="/friends/add" className="text-[#534AB7] text-[13px] font-medium">הוסף חברים ←</Link>
+            </div>
           ) : offset === 0 ? (
             // ── Default: 3 days stacked ──────────────────────────────────────
             [0, 1, 2].map(off => {
@@ -442,6 +446,61 @@ export default function MeetupsPage() {
           )}
         </div>
 
+
+        {/* ── Section 2: Empty state + היסטוריה ─────────────────────────── */}
+        {(futureMeetups.length === 0 || pastMeetups.length > 0) && (
+          <div className="px-3 pb-6 flex flex-col gap-3">
+
+            {/* תיבה סגולה — מופיעה כשאין מפגשים עתידיים */}
+            {futureMeetups.length === 0 && (
+              <Link href="/friends/add" className="block bg-[#534AB7] rounded-xl px-5 py-5 text-center active:opacity-80" dir="rtl">
+                <p className="text-white text-[15px] font-semibold leading-relaxed">
+                  אין לכם עדיין מפגשים,<br />הוסיפו חברים וצרו מפגשים משמחים
+                </p>
+                <p className="text-white/60 text-[12px] mt-2">לחץ להוסיף חבר ראשון ←</p>
+              </Link>
+            )}
+
+            {/* מפגשים שעברו */}
+            {pastMeetups.length > 0 && (
+              <div>
+                <p className="text-[12px] font-medium text-gray-400 mb-2 px-1" dir="rtl">
+                  מפגשים שעברו ({pastMeetups.length})
+                </p>
+                <div className="bg-white rounded-xl border border-[#e0ddf0] overflow-hidden">
+                  {pastMeetups.map((m, i) => {
+                    const d         = new Date(m.date + 'T00:00:00');
+                    const icon      = MEETUP_TYPE_DEFS.find(t => t.value === m.type)?.icon ?? '🎉';
+                    const hostLabel = m.host === 'us' ? '🏠 אצלנו' : m.host === 'them' ? '🚶 אצלהם' : '';
+                    return (
+                      <div key={m.id}
+                        className={clsx('px-4 py-3 flex items-center gap-3',
+                          i < pastMeetups.length - 1 && 'border-b border-[#f0eef8]'
+                        )}
+                        dir="rtl"
+                      >
+                        <span className="text-lg shrink-0">{icon}</span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[13px] font-medium text-gray-800 truncate">{m.title}</p>
+                          <p className="text-[11px] text-gray-400 mt-0.5">
+                            {d.getDate()} ב{HEB_MONTHS[d.getMonth()]} {d.getFullYear()} · {formatTime(m.timeFrom)}–{formatTime(m.timeTo)}
+                          </p>
+                        </div>
+                        {hostLabel && (
+                          <span className={clsx('text-[10px] px-2 py-0.5 rounded-full shrink-0',
+                            m.host === 'us' ? 'bg-[#EEEDFE] text-[#534AB7]' : 'bg-gray-100 text-gray-500'
+                          )}>
+                            {hostLabel}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
       </main>
 

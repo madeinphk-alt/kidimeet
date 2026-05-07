@@ -269,30 +269,25 @@ export default function LuzPage() {
       </header>
 
       <main className="flex-1 overflow-y-auto p-3">
-        {meetups.length === 0 ? (
-          <div className="mt-12 flex flex-col items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-[#EEEDFE] flex items-center justify-center text-3xl">📋</div>
-            <p className="text-gray-500 text-[15px] font-medium">הלוז ריק</p>
-            <p className="text-gray-400 text-[13px] text-center px-8">קבע פליידייטים ואירועים — הם יופיעו כאן לפי סדר</p>
-            <Link href="/meetups" className="bg-[#534AB7] text-white text-[14px] font-medium px-6 py-3 rounded-xl">
-              לפליידייט →
-            </Link>
+        {upcoming.length === 0 && (
+          <Link href="/friends/add" className="block bg-[#534AB7] rounded-xl px-5 py-5 text-center active:opacity-80 mb-4" dir="rtl">
+            <p className="text-white text-[15px] font-semibold leading-relaxed">
+              אין לכם עדיין מפגשים,<br />הוסיפו חברים וצרו מפגשים משמחים
+            </p>
+            <p className="text-white/60 text-[12px] mt-2">לחץ להוסיף חבר ראשון ←</p>
+          </Link>
+        )}
+        {upcoming.length > 0 && (
+          <div className="mb-4">
+            <p className="text-[12px] font-medium text-gray-400 mb-2 px-1" dir="rtl">קרובים</p>
+            {upcoming.map(m => <EventRow key={m.id} m={m} isPast={false} />)}
           </div>
-        ) : (
-          <>
-            {upcoming.length > 0 && (
-              <div className="mb-4">
-                <p className="text-[12px] font-medium text-gray-400 mb-2 px-1" dir="rtl">קרובים</p>
-                {upcoming.map(m => <EventRow key={m.id} m={m} isPast={false} />)}
-              </div>
-            )}
-            {past.length > 0 && (
-              <div>
-                <p className="text-[12px] font-medium text-gray-300 mb-2 px-1" dir="rtl">עבר</p>
-                {past.map(m => <EventRow key={m.id} m={m} isPast={true} />)}
-              </div>
-            )}
-          </>
+        )}
+        {past.length > 0 && (
+          <div>
+            <p className="text-[12px] font-medium text-gray-300 mb-2 px-1" dir="rtl">עבר</p>
+            {past.map(m => <EventRow key={m.id} m={m} isPast={true} />)}
+          </div>
         )}
       </main>
 

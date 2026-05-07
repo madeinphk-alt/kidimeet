@@ -391,12 +391,7 @@ export default function MeetupsPage() {
 
         {/* Friend list */}
         <div className="px-3 pt-3 pb-4">
-          {friends.length === 0 ? (
-            <div className="bg-white rounded-xl border border-[#e0ddf0] p-5 text-center" dir="rtl">
-              <p className="text-gray-400 text-[14px] mb-2">עדיין אין חברים ברשימה</p>
-              <Link href="/friends/add" className="text-[#534AB7] text-[13px] font-medium">הוסף חברים ←</Link>
-            </div>
-          ) : offset === 0 ? (
+          {friends.length === 0 ? null : offset === 0 ? (
             // ── Default: 3 days stacked ──────────────────────────────────────
             [0, 1, 2].map(off => {
               const date    = addDays(todayDate, off);

@@ -272,7 +272,7 @@ export default function LuzPage() {
         {upcoming.length === 0 && (
           <Link href="/friends/add" className="block bg-[#534AB7] rounded-xl px-5 py-5 text-center active:opacity-80 mb-4" dir="rtl">
             <p className="text-white text-[15px] font-semibold leading-relaxed">
-              אין לכם עדיין מפגשים,<br />הוסיפו חברים וצרו מפגשים משמחים
+              אין לכם מפגשים עתידיים מתוכננים<br />הוסיפו חברים וצרו מפגשים משמחים
             </p>
             <p className="text-white/60 text-[12px] mt-2">לחץ להוסיף חבר ראשון ←</p>
           </Link>

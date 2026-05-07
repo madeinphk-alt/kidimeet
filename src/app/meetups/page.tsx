@@ -386,10 +386,12 @@ export default function MeetupsPage() {
         {/* Friend list */}
         <div className="px-3 pt-3 pb-4">
           {friends.length === 0 ? (
-            <div className="bg-white rounded-xl border border-[#e0ddf0] p-6 text-center">
-              <p className="text-gray-400 text-[14px] mb-2">עדיין אין חברים ברשימה</p>
-              <Link href="/friends/add" className="text-[#534AB7] text-[13px] font-medium">הוסף חברים →</Link>
-            </div>
+            <Link href="/friends/add" className="block bg-[#534AB7] rounded-xl px-5 py-5 text-center active:opacity-80" dir="rtl">
+              <p className="text-white text-[15px] font-semibold leading-relaxed">
+                אין לכם עדיין מפגשים,<br />הוסיפו חברים וצרו מפגשים משמחים
+              </p>
+              <p className="text-white/60 text-[12px] mt-2">לחץ להוסיף חבר ראשון ←</p>
+            </Link>
           ) : offset === 0 ? (
             // ── Default: 3 days stacked ──────────────────────────────────────
             [0, 1, 2].map(off => {

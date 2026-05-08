@@ -24,15 +24,17 @@ export default function ProfilePage() {
   });
   const [saved, setSaved] = useState(false);
 
-  // Load profile once
+  // Load profile once — create empty default if none exists
   useEffect(() => {
     const p = getProfile();
-    if (!p) { router.replace('/onboarding'); return; }
-    setProfile(p);
-    const child = getActiveChild(p);
-    setEditChildId(child.id);
-    setAvail(child.availability ?? {});
-  }, [router]);
+    if (p) {
+      setProfile(p);
+      const child = getActiveChild(p);
+      setEditChildId(child.id);
+      setAvail(child.availability ?? {});
+    }
+    // no profile → page renders empty, user can fill via פרטי ההורה
+  }, []);
 
   // When editChildId changes, load that child's availability (and flush prev changes first)
   const switchToChild = useCallback((p: UserProfile, childId: string) => {
@@ -68,9 +70,7 @@ export default function ProfilePage() {
     setTimeout(() => setSaved(false), 2000);
   };
 
-  if (!profile) return null;
-
-  const editChild = profile.children.find(c => c.id === editChildId) ?? profile.children[0];
+  const editChild = profile?.children.find(c => c.id === editChildId) ?? profile?.children[0];
 
   return (
     <div className="flex flex-col h-[100dvh] bg-[#f7f6fb] overflow-hidden">
@@ -104,13 +104,13 @@ export default function ProfilePage() {
           <p className="text-[11px] font-medium text-gray-400 mb-2 text-right">הילדים שלי</p>
 
           <div className="flex flex-col gap-2" dir="rtl">
-            {profile.children.map(child => {
+            {(profile?.children ?? []).map(child => {
               const colors = AVATAR_COLORS[child.avatarColor] ?? AVATAR_COLORS['purple'];
               const isActive = child.id === editChildId;
               return (
                 <button
                   key={child.id}
-                  onClick={() => switchToChild(profile, child.id)}
+                  onClick={() => profile && switchToChild(profile, child.id)}
                   className={clsx(
                     'flex items-center gap-3 px-4 py-3 rounded-xl border transition-colors text-right',
                     isActive
@@ -209,9 +209,9 @@ export default function ProfilePage() {
             className="w-full bg-white rounded-xl border border-[#e0ddf0] px-4 py-3 text-right"
             dir="rtl"
           >
-            <p className="text-[14px] font-semibold text-gray-900">{profile.parent.name || '—'}</p>
-            <p className="text-[12px] text-gray-400 mt-0.5">{profile.parent.phone || '—'}</p>
-            {profile.parent.address && (
+            <p className="text-[14px] font-semibold text-gray-900">{profile?.parent.name || '—'}</p>
+            <p className="text-[12px] text-gray-400 mt-0.5">{profile?.parent.phone || '—'}</p>
+            {profile?.parent.address && (
               <p className="text-[11px] text-gray-400 mt-0.5">📍 {profile.parent.address}</p>
             )}
           </button>

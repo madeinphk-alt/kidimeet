@@ -18,7 +18,7 @@ export default function EditParentPage() {
 
   useEffect(() => {
     const p = getProfile();
-    if (!p) { router.replace('/onboarding'); return; }
+    if (!p) return; // no profile yet — show empty form
     const parts = p.parent.name.trim().split(' ');
     setFirstName(parts[0] ?? '');
     setLastName(parts.slice(1).join(' ') ?? '');
@@ -26,17 +26,21 @@ export default function EditParentPage() {
     setRole(p.parent.role);
     setAddress(p.parent.address ?? '');
     setBuildingDetails(p.parent.buildingDetails ?? '');
-  }, [router]);
+  }, []);
 
   const canSave = firstName.trim() && phone.trim();
 
   const handleSave = () => {
-    const p = getProfile();
-    if (!p) return;
+    const existing = getProfile();
     const fullName = [firstName.trim(), lastName.trim()].filter(Boolean).join(' ');
+    const baseProfile = existing ?? {
+      children: [],
+      activeChildId: '',
+      parent: { name: '', phone: '', role: 'mom' as const, address: '', buildingDetails: '' },
+    };
     saveProfile({
-      ...p,
-      parent: { ...p.parent, name: fullName, phone: phone.trim(), role, address: address.trim(), buildingDetails: buildingDetails.trim() },
+      ...baseProfile,
+      parent: { ...baseProfile.parent, name: fullName, phone: phone.trim(), role, address: address.trim(), buildingDetails: buildingDetails.trim() },
     });
     setSaved(true);
     setTimeout(() => router.back(), 800);

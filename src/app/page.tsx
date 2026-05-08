@@ -65,9 +65,7 @@ export default function LuzPage() {
   const [ready,   setReady]   = useState(false);
 
   const loadProfile = () => {
-    const p = getProfile();
-    if (!p) { router.replace('/onboarding'); return; }
-    setProfile(p);
+    setProfile(getProfile());
     setReady(true);
   };
 

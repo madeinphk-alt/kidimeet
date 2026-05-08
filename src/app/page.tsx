@@ -267,6 +267,16 @@ export default function LuzPage() {
       </header>
 
       <main className="flex-1 overflow-y-auto p-3">
+        {/* תיבה עליונה — רק אם אין פרופיל ילד */}
+        {(!profile || profile.children.length === 0) && (
+          <Link href="/settings" className="block bg-white border border-[#534AB7] rounded-xl px-5 py-4 text-center active:opacity-70 mb-4" dir="rtl">
+            <p className="text-[#534AB7] text-[14px] font-semibold leading-relaxed">
+              צרו פרופיל זמינות לילדים העסוקים שלכם<br />ותעזרו להם לפגוש יותר חברים
+            </p>
+            <p className="text-[#534AB7]/50 text-[12px] mt-1.5">לחץ ליצירת פרופיל ←</p>
+          </Link>
+        )}
+
         {upcoming.length === 0 && (
           <Link href="/friends/add" className="block bg-[#534AB7] rounded-xl px-5 py-5 text-center active:opacity-80 mb-4" dir="rtl">
             <p className="text-white text-[15px] font-semibold leading-relaxed">

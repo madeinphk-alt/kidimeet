@@ -276,12 +276,20 @@ export default function LuzPage() {
           </Link>
         )}
 
-        {upcoming.length === 0 && (
+        {upcoming.length === 0 && friends.length === 0 && (
           <Link href="/friends/add" className="block bg-[#534AB7] rounded-xl px-5 py-5 text-center active:opacity-80 mb-4" dir="rtl">
             <p className="text-white text-[15px] font-semibold leading-relaxed">
-              אין לכם מפגשים עתידיים מתוכננים<br />הוסיפו חברים וצרו מפגשים משמחים
+              אין לכם מפגשים עתידיים<br />הוסיפו חברים וצרו מפגשים משמחים
             </p>
             <p className="text-white/60 text-[12px] mt-2">לחץ להוסיף חבר ראשון ←</p>
+          </Link>
+        )}
+        {upcoming.length === 0 && friends.length > 0 && (
+          <Link href="/meetups" className="block bg-[#534AB7] rounded-xl px-5 py-5 text-center active:opacity-80 mb-4" dir="rtl">
+            <p className="text-white text-[15px] font-semibold leading-relaxed">
+              אין לכם מפגשים עתידיים מתוכננים<br />כנסו למפגשים ותקבעו עם חברים פנויים<br />בימים שמתאימים לכם בדיוק
+            </p>
+            <p className="text-white/60 text-[12px] mt-2">לחץ לעמוד המפגשים ←</p>
           </Link>
         )}
         {upcoming.length > 0 && (

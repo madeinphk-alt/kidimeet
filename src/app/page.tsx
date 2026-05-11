@@ -176,16 +176,15 @@ export default function LuzPage() {
             <div className="flex flex-col items-center gap-1 shrink-0">
               {kids.map(k => {
                 const colors = AVATAR_COLORS[k.avatarColor] ?? AVATAR_COLORS['purple'];
-                const firstName = k.name.split(' ')[0];
-                const fontSize = firstName.length > 4 ? 'text-[8px]' : 'text-[9px]';
                 return (
-                  <Link key={k.id} href={`/friends/${k.id}`}
-                    className={clsx(
-                      'w-10 h-10 rounded-full flex items-center justify-center font-bold text-center leading-tight px-1',
-                      colors.bg, colors.text, fontSize
-                    )}
-                  >
-                    {firstName}
+                  <Link key={k.id} href={`/friends/${k.id}`} className="flex flex-col items-center gap-0.5">
+                    <div className={clsx(
+                      'w-10 h-10 rounded-full flex items-center justify-center font-bold text-[10px] shrink-0',
+                      colors.bg, colors.text
+                    )}>
+                      {k.avatarInitials}
+                    </div>
+                    <span className="text-[9px] text-gray-500 text-center max-w-[48px] leading-tight">{k.name}</span>
                   </Link>
                 );
               })}

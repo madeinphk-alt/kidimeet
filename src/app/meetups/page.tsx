@@ -238,7 +238,7 @@ export default function MeetupsPage() {
             dir="rtl"
           >
             <div className="px-4 py-3 flex items-center">
-              <span className={clsx('text-[15px] font-semibold shrink-0', isSkipped ? 'text-gray-400' : 'text-gray-900')}>{firstName}</span>
+              <span className={clsx('text-[15px] font-semibold shrink-0', isSkipped ? 'text-gray-400' : 'text-gray-900')}>{friend.name}</span>
               <span className="mx-2 text-gray-200 shrink-0">|</span>
               <span className={clsx('text-[13px] font-medium shrink-0', isSkipped ? 'text-gray-300' : 'text-[#534AB7]')}>{slotLabel}</span>
               <span className="mx-2 text-gray-200 shrink-0">|</span>
@@ -326,7 +326,7 @@ export default function MeetupsPage() {
           <div key={friend.id} className="bg-[#f0fdf4] border border-[#bbf7d0] rounded-xl px-4 py-3 flex items-center gap-3" dir="rtl">
             <MiniAvatar friend={friend} />
             <div className="flex-1 min-w-0">
-              <p className="text-[14px] font-medium text-gray-900">{friend.name.split(' ')[0]}</p>
+              <p className="text-[14px] font-medium text-gray-900">{friend.name}</p>
               <p className="text-[11px] text-green-600 mt-0.5">🎉 פליידייט מאושר{h === 'us' ? ' · אצלנו' : h === 'them' ? ` · אצל ${friend.name.split(' ')[0]}` : ''}</p>
             </div>
             <span className="text-xl">✅</span>

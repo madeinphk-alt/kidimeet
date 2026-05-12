@@ -3,6 +3,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import { getFriends, deleteFriend, getPlannedMeetups, getProfile, getActiveChild, MEETUP_TYPE_DEFS, formatTime, getMsgTemplates, applyMsgTemplate } from '@/lib/storage';
+import { openWa } from '@/lib/wa';
 import type { Friend, PlannedMeetup, UserProfile } from '@/lib/storage';
 import { AVATAR_COLORS, HEB_DAYS } from '@/lib/utils';
 import BottomNav from '@/components/BottomNav';
@@ -52,7 +53,7 @@ function FriendProfile() {
       role:        profile.parent.role === 'mom' ? 'אמא' : 'אבא',
     };
     const msg = applyMsgTemplate(tpls[tplKey], vars);
-    window.open(`https://wa.me/${formatWaPhone(parent.phone)}?text=${encodeURIComponent(msg)}`, '_blank');
+    openWa(formatWaPhone(parent.phone), msg);
   }
   const activeDays = Object.entries(friend.availability)
     .filter(([, s]) => s.active)

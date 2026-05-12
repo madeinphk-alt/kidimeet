@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import WaChooser from '@/components/WaChooser';
 
 export const metadata: Metadata = {
   title: 'KidiMeet',
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <div className="min-h-screen max-w-md mx-auto">
           {children}
+          <WaChooser />
         </div>
       </body>
     </html>

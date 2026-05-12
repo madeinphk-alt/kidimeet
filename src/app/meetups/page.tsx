@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import { addDays, format, differenceInDays } from 'date-fns';
 import { getPlannedMeetups, savePlannedMeetup, getFriends, getProfile, getActiveChild, formatTime, MEETUP_TYPE_DEFS } from '@/lib/storage';
+import { openWa } from '@/lib/wa';
 import type { PlannedMeetup, Friend, UserProfile } from '@/lib/storage';
 import { AVATAR_COLORS } from '@/lib/utils';
 import BottomNav from '@/components/BottomNav';
@@ -182,7 +183,7 @@ export default function MeetupsPage() {
   const proposePlaydate = (friend: Friend, parent: { name: string; phone: string }, host: 'us' | 'them' | 'other', date: Date, dateStr: string, variant: 1 | 2 = 1) => {
     if (!parent?.phone) return;
     const msg = buildProposeMsg(friend, parent, host, date, variant);
-    window.open(`https://wa.me/${formatWaPhone(parent.phone)}?text=${encodeURIComponent(msg)}`, '_blank');
+    openWa(formatWaPhone(parent.phone), msg);
     setProposal(friend.id, dateStr, 'suggested');
   };
 
@@ -280,7 +281,7 @@ export default function MeetupsPage() {
                     return (
                       <>
                         <button disabled={!canPropose}
-                          onClick={() => canPropose && rp && window.open(`https://wa.me/${formatWaPhone(rp.phone)}`, '_blank')}
+                          onClick={() => canPropose && rp && openWa(formatWaPhone(rp.phone))}
                           className={clsx('flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium shrink-0',
                             canPropose ? 'bg-gray-50 border border-gray-200 text-gray-600' : 'bg-gray-50 border border-gray-200 text-gray-300'
                           )}>

@@ -3,6 +3,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import clsx from 'clsx';
 import { getFriends, saveFriend, getProfile, getInitials, pickColor, DEFAULT_DAY_SLOT, FRIEND_GROUP_LABELS, getActiveChild, getMsgTemplates, applyMsgTemplate } from '@/lib/storage';
+import { openWa } from '@/lib/wa';
 import type { DaySlot, FriendParent, Friend, FriendGroup, UserProfile, MessageTemplates } from '@/lib/storage';
 import { HEB_DAYS, HEB_DAYS_SINGLE } from '@/lib/utils';
 import DayAvailPicker from '@/components/DayAvailPicker';
@@ -174,7 +175,7 @@ function AddFriendForm() {
     if (!profile) return;
     const vars = buildMsgVars(profile, childFirstName.trim(), parent);
     const msg  = applyMsgTemplate(getMsgTemplates()[tplKey], vars);
-    window.open(`https://wa.me/${formatWaPhone(parent.phone)}?text=${encodeURIComponent(msg)}`, '_blank');
+    openWa(formatWaPhone(parent.phone), msg);
     saveFriend(buildFriend(true));
     router.push('/friends');
   };

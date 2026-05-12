@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import { differenceInDays } from 'date-fns';
 import { getFriends, getProfile, getActiveChild, getPlannedMeetups, getMsgTemplates, applyMsgTemplate } from '@/lib/storage';
+import { openWa } from '@/lib/wa';
 import type { Friend, UserProfile } from '@/lib/storage';
 import BottomNav from '@/components/BottomNav';
 import ChildSwitcher from '@/components/ChildSwitcher';
@@ -74,8 +75,7 @@ export default function FriendsPage() {
   };
 
   // ── Handlers ─────────────────────────────────────────────────────────────
-  const openWa = (phone: string, msg: string) =>
-    window.open(`https://wa.me/${formatWaPhone(phone)}?text=${encodeURIComponent(msg)}`, '_blank');
+  const sendWa = (phone: string, msg: string) => openWa(formatWaPhone(phone), msg);
 
   const buildVars = (friend: Friend, parent: { name: string; phone: string }) => ({
     parentFirst: parent.name.split(' ')[0],
@@ -162,7 +162,7 @@ export default function FriendsPage() {
                         )}
                         <div className="px-3 py-2 flex items-center gap-2">
                           <button
-                            onClick={() => window.open(`https://wa.me/${formatWaPhone(p.phone)}`, '_blank')}
+                            onClick={() => openWa(formatWaPhone(p.phone))}
                             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-[11px] text-gray-600 shrink-0">
                             <span className="text-[#25D366]"><WaIcon /></span>
                             הודעה ל{p.name.split(' ')[0]}
@@ -170,12 +170,12 @@ export default function FriendsPage() {
                           {profile && (
                             <>
                               <button
-                                onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 1))}
+                                onClick={() => sendWa(p.phone, buildProposeMsg(friend, p, 1))}
                                 className="px-2 py-1.5 rounded-lg bg-[#25D366] text-white text-[11px] font-medium">
                                 אצלנו.כם
                               </button>
                               <button
-                                onClick={() => openWa(p.phone, buildProposeMsg(friend, p, 2))}
+                                onClick={() => sendWa(p.phone, buildProposeMsg(friend, p, 2))}
                                 className="px-2 py-1.5 rounded-lg bg-[#1aab55] text-white text-[11px] font-medium">
                                 הזמנה#1
                               </button>

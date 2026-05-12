@@ -129,7 +129,7 @@ export default function FriendsPage() {
 
                   {/* ── Info row — לחיץ לפרופיל ──────────────────────────── */}
                   <Link href={`/friends/${friend.id}`} className="px-4 py-3 flex items-center gap-0 active:bg-gray-50">
-                    <span className="text-[15px] font-semibold text-gray-900 shrink-0">{fFirst}</span>
+                    <span className="text-[15px] font-semibold text-gray-900 shrink-0">{friend.name}</span>
                     {parentNames && (
                       <>
                         <span className="mx-2 text-gray-200 shrink-0">|</span>

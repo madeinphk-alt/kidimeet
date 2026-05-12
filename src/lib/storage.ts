@@ -357,7 +357,10 @@ export const DEFAULT_MSG_TEMPLATES: MessageTemplates = {
 אני עובד עם אפליקציה שעוזרת לי לתאם יותר מפגשים לילדים שלי
 לכן אשמח שתקדישו להודעה כמה רגעים כדי שנצליח לשמח אותם
 וגם לנו יהיה יותר קל...
-תודה רבה {שם_שלי}`,
+תודה רבה {שם_שלי}
+
+מוזמנים לנסות גם ולתת לי פידבק — זה פיתוח שלי 🙂
+https://kidimeet.vercel.app/`,
 
   initial2: `היי {שם_הורה} 👋
 {שם_שלי} {תפקיד} של {הילד_שלי}
@@ -396,8 +399,8 @@ export function getMsgTemplates(): MessageTemplates {
     const saved = JSON.parse(raw) as Partial<MessageTemplates>;
     // migrate: if initial template is the old one-liner, reset to new default
     if (saved.initial?.startsWith(LEGACY_INITIAL_PREFIX)) delete saved.initial;
-    // migrate: if initial template is missing "תכתבו לי", it's an older version — reset
-    if (saved.initial && !saved.initial.includes('תכתבו לי')) delete saved.initial;
+    // migrate: if initial template is missing "תכתבו לי" or the app URL, it's an older version — reset
+    if (saved.initial && (!saved.initial.includes('תכתבו לי') || !saved.initial.includes('kidimeet.vercel.app'))) delete saved.initial;
     return { ...DEFAULT_MSG_TEMPLATES, ...saved };
   } catch { return { ...DEFAULT_MSG_TEMPLATES }; }
 }

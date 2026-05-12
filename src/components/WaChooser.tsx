@@ -12,12 +12,29 @@ export default function WaChooser() {
   if (!target) return null;
 
   const send = (type: 'regular' | 'business') => {
-    const base = type === 'business'
-      ? `https://api.whatsapp.com/send?phone=${target.phone}`
-      : `https://wa.me/${target.phone}`;
-    const url = target.message
-      ? `${base}${type === 'business' ? '&' : '?'}text=${encodeURIComponent(target.message)}`
-      : base;
+    const encodedText = encodeURIComponent(target.message);
+    let url: string;
+
+    if (type === 'business') {
+      // Android intent → forces WhatsApp Business (package: com.whatsapp.w4b)
+      // iOS fallback: same wa.me link (iOS has no separate scheme for WA Business)
+      const isAndroid = /android/i.test(navigator.userAgent);
+      if (isAndroid) {
+        url = target.message
+          ? `intent://send?phone=${target.phone}&text=${encodedText}#Intent;package=com.whatsapp.w4b;scheme=whatsapp;end`
+          : `intent://send?phone=${target.phone}#Intent;package=com.whatsapp.w4b;scheme=whatsapp;end`;
+      } else {
+        // iOS: no way to force WA Business, open wa.me and let OS choose
+        url = target.message
+          ? `https://wa.me/${target.phone}?text=${encodedText}`
+          : `https://wa.me/${target.phone}`;
+      }
+    } else {
+      url = target.message
+        ? `https://wa.me/${target.phone}?text=${encodedText}`
+        : `https://wa.me/${target.phone}`;
+    }
+
     window.open(url, '_blank');
     setTarget(null);
   };

@@ -267,7 +267,8 @@ export default function LuzPage() {
         ) : <div className="w-24" />}
       </header>
 
-      <main className="flex-1 overflow-y-auto p-3">
+      {/* ── אזור גלילה — רק הפגישות וה-CTAs ── */}
+      <div className="flex-1 overflow-y-auto p-3">
         {/* תיבה עליונה — רק אם אין פרופיל ילד */}
         {(!profile || profile.children.length === 0) && (
           <Link href="/settings" className="block bg-white border border-[#534AB7] rounded-xl px-5 py-4 text-center active:opacity-70 mb-4" dir="rtl">
@@ -306,25 +307,27 @@ export default function LuzPage() {
             {past.map(m => <EventRow key={m.id} m={m} isPast={true} />)}
           </div>
         )}
+      </div>
 
-        {/* כפתור ייצוא — בתוך הגלילה */}
+      {/* ── תחתית קבועה — לא גוללת ── */}
+      <div className="shrink-0 px-3 pb-1 bg-[#f7f6fb] flex flex-col gap-1.5">
         {meetups.length > 0 && (
           <button
             onClick={() => downloadICS(meetups)}
-            className="w-full flex items-center justify-center gap-2 bg-white border border-[#e0ddf0] text-[#534AB7] text-[13px] font-medium py-2.5 rounded-xl active:opacity-70 mt-2"
+            className="w-full flex items-center justify-center gap-2 bg-white border border-[#e0ddf0] text-[#534AB7] text-[13px] font-medium py-2.5 rounded-xl active:opacity-70"
           >
             <span>📤</span>
             <span>ייצוא מפגשים לגוגל קלנדר</span>
           </button>
         )}
 
-        {/* Ad banner — MAI — בתוך הגלילה */}
+        {/* Ad banner — MAI */}
         <button
           onClick={() => {
             const msg = encodeURIComponent('היי מאי ראיתי את הפרסום שלך באפליקציה למפגש ילדים ואשמח לדבר');
             window.open(`https://wa.me/972545301616?text=${msg}`, '_blank');
           }}
-          className="w-full rounded-xl overflow-hidden active:opacity-80 block mt-2"
+          className="w-full rounded-xl overflow-hidden active:opacity-80 block"
         >
           <Image
             src="/mai1.png"
@@ -335,7 +338,7 @@ export default function LuzPage() {
             style={{ maxHeight: '120px' }}
           />
         </button>
-      </main>
+      </div>
 
       <BottomNav active="home" />
     </div>

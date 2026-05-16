@@ -306,28 +306,25 @@ export default function LuzPage() {
             {past.map(m => <EventRow key={m.id} m={m} isPast={true} />)}
           </div>
         )}
-      </main>
 
-      {meetups.length > 0 && (
-        <div className="px-3 pb-2 bg-[#f7f6fb]">
+        {/* כפתור ייצוא — בתוך הגלילה */}
+        {meetups.length > 0 && (
           <button
             onClick={() => downloadICS(meetups)}
-            className="w-full flex items-center justify-center gap-2 bg-white border border-[#e0ddf0] text-[#534AB7] text-[13px] font-medium py-2.5 rounded-xl active:opacity-70"
+            className="w-full flex items-center justify-center gap-2 bg-white border border-[#e0ddf0] text-[#534AB7] text-[13px] font-medium py-2.5 rounded-xl active:opacity-70 mt-2"
           >
             <span>📤</span>
             <span>ייצוא מפגשים לגוגל קלנדר</span>
           </button>
-        </div>
-      )}
+        )}
 
-      {/* Ad banner — MAI */}
-      <div className="px-3 pb-2 bg-[#f7f6fb]">
+        {/* Ad banner — MAI — בתוך הגלילה */}
         <button
           onClick={() => {
             const msg = encodeURIComponent('היי מאי ראיתי את הפרסום שלך באפליקציה למפגש ילדים ואשמח לדבר');
             window.open(`https://wa.me/972545301616?text=${msg}`, '_blank');
           }}
-          className="w-full rounded-xl overflow-hidden active:opacity-80 block"
+          className="w-full rounded-xl overflow-hidden active:opacity-80 block mt-2"
         >
           <Image
             src="/mai1.png"
@@ -338,7 +335,7 @@ export default function LuzPage() {
             style={{ maxHeight: '120px' }}
           />
         </button>
-      </div>
+      </main>
 
       <BottomNav active="home" />
     </div>

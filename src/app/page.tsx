@@ -41,6 +41,7 @@ function downloadICS(meetups: PlannedMeetup[]): void {
   a.href = url; a.download = 'kidimeet.ics'; a.click();
   URL.revokeObjectURL(url);
 }
+import Image from 'next/image';
 import { AVATAR_COLORS } from '@/lib/utils';
 import BottomNav from '@/components/BottomNav';
 import ChildSwitcher from '@/components/ChildSwitcher';
@@ -318,6 +319,27 @@ export default function LuzPage() {
           </button>
         </div>
       )}
+
+      {/* Ad banner — MAI */}
+      <div className="px-3 pb-2 bg-[#f7f6fb]">
+        <button
+          onClick={() => {
+            const msg = encodeURIComponent('היי מאי ראיתי את הפרסום שלך באפליקציה למפגש ילדים ואשמח לדבר');
+            window.open(`https://wa.me/972545301616?text=${msg}`, '_blank');
+          }}
+          className="w-full rounded-xl overflow-hidden active:opacity-80 block"
+        >
+          <Image
+            src="/mai1.png"
+            alt="פרסומת מאי"
+            width={480}
+            height={120}
+            className="w-full object-cover"
+            style={{ maxHeight: '120px' }}
+          />
+        </button>
+      </div>
+
       <BottomNav active="home" />
     </div>
   );

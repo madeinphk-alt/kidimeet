@@ -145,6 +145,12 @@ export default function LuzPage() {
     const dl     = eventDateLabel(m.date, todayStr);
     const isToday = m.date === todayStr;
 
+    const childFirst   = profile ? getActiveChild(profile).name.split(' ')[0] : '';
+    const friendsLabel = kids.map(k => k.name).join(', ');
+    const displayTitle = (kids.length > 0 && childFirst)
+      ? `פליידייט ל${childFirst} עם ${friendsLabel}`
+      : m.title;
+
     return (
       <div className={clsx(
         'bg-white rounded-xl border px-3 py-2.5 mb-1.5',
@@ -159,7 +165,7 @@ export default function LuzPage() {
             <span className="text-base shrink-0 mt-0.5">{icon}</span>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <p className={clsx('text-[13px] font-semibold truncate', isPast ? 'text-gray-500' : 'text-gray-900')}>{m.title}</p>
+                <p className={clsx('text-[13px] font-semibold truncate', isPast ? 'text-gray-500' : 'text-gray-900')}>{displayTitle}</p>
                 {isToday && <span className="text-[9px] bg-[#534AB7] text-white px-1.5 py-0.5 rounded-full shrink-0">היום</span>}
               </div>
               <p className="text-[11px] text-gray-400 mt-0.5">

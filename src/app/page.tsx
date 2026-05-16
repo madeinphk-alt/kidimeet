@@ -311,16 +311,6 @@ export default function LuzPage() {
 
       {/* ── תחתית קבועה — לא גוללת ── */}
       <div className="shrink-0 px-3 pb-1 bg-[#f7f6fb] flex flex-col gap-1.5">
-        {meetups.length > 0 && (
-          <button
-            onClick={() => downloadICS(meetups)}
-            className="w-full flex items-center justify-center gap-2 bg-white border border-[#e0ddf0] text-[#534AB7] text-[13px] font-medium py-2.5 rounded-xl active:opacity-70"
-          >
-            <span>📤</span>
-            <span>ייצוא מפגשים לגוגל קלנדר</span>
-          </button>
-        )}
-
         {/* Ad banner — MAI */}
         <button
           onClick={() => {

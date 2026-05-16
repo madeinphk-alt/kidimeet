@@ -91,6 +91,11 @@ export default function FriendsPage() {
     return applyMsgTemplate(tpl, buildVars(friend, parent));
   };
 
+  const buildDaysMsg = (friend: Friend, parent: { name: string; phone: string }): string => {
+    if (!profile) return '';
+    return applyMsgTemplate(getMsgTemplates().days, buildVars(friend, parent));
+  };
+
   return (
     <div className="flex flex-col h-full bg-[#f7f6fb] overflow-hidden">
       {/* Header */}
@@ -169,6 +174,11 @@ export default function FriendsPage() {
                           </button>
                           {profile && (
                             <>
+                              <button
+                                onClick={() => sendWa(p.phone, buildDaysMsg(friend, p))}
+                                className="px-2 py-1.5 rounded-lg bg-[#534AB7] text-white text-[11px] font-medium">
+                                ימים
+                              </button>
                               <button
                                 onClick={() => sendWa(p.phone, buildProposeMsg(friend, p, 1))}
                                 className="px-2 py-1.5 rounded-lg bg-[#25D366] text-white text-[11px] font-medium">

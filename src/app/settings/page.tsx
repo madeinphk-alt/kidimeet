@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import {
   getProfile, saveProfile, getActiveChild, switchActiveChild, DEFAULT_DAY_SLOT,
 } from '@/lib/storage';
+import { openWa } from '@/lib/wa';
 import type { UserProfile, ChildProfile, DaySlot } from '@/lib/storage';
 import { AVATAR_COLORS, HEB_DAYS_SINGLE } from '@/lib/utils';
 import DayAvailPicker from '@/components/DayAvailPicker';
@@ -232,10 +233,7 @@ export default function ProfilePage() {
 
         {/* Feedback box */}
         <button
-          onClick={() => {
-            const msg = encodeURIComponent('היי, אני נעזר בקידימיט ואשמח לתת לכם פידבוק');
-            window.open(`https://wa.me/972546545850?text=${msg}`, '_blank');
-          }}
+          onClick={() => openWa('972546545850', 'היי, אני נעזר בקידימיט ואשמח לתת לכם פידבוק')}
           className="w-full bg-[#EEEDFE] border border-[#c0bce0] rounded-xl px-5 py-4 text-center active:opacity-70 mt-2"
           dir="rtl"
         >

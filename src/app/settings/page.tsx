@@ -231,6 +231,18 @@ export default function ProfilePage() {
           </button>
         </div>
 
+        {/* Share box */}
+        <button
+          onClick={() => openWa('', 'היי, אני נעזר באפליקציה חדשה שעוזרת לי לקבוע יותר מפגשים לילדים שלי בחיים העמוסים האלה וחשבתי שאולי זה יעזור לכם גם. אז מוזמנים לנסות. https://kidimeet.vercel.app/')}
+          className="w-full bg-white border border-[#e0ddf0] rounded-xl px-5 py-4 text-center active:opacity-70 mt-2"
+          dir="rtl"
+        >
+          <p className="text-[13px] text-gray-700 leading-relaxed">
+            אם אהבתם מוזמנים להעביר לעוד חברים מפרדס חנה בלבד כרגע כי רק עליהם אנחנו סומכים בינתיים 😊{' '}
+            <span className="font-semibold text-[#534AB7] underline">לחצו כאן</span>
+          </p>
+        </button>
+
         {/* Feedback box */}
         <button
           onClick={() => openWa('972546545850', 'היי, אני נעזר בקידימיט ואשמח לתת לכם פידבוק')}

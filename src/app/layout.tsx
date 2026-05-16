@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
       <body>
-        <div className="min-h-screen max-w-md mx-auto">
+        <div className="h-full max-w-md mx-auto">
           {children}
           <WaChooser />
         </div>

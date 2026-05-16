@@ -31,7 +31,7 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-[#f7f6fb]">
+    <div className="flex flex-col h-full bg-[#f7f6fb]">
       <header className="bg-[#534AB7] px-4 py-3 flex items-center justify-between">
         <button
           onClick={() => router.push('/settings/messages/new')}

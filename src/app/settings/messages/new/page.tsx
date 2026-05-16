@@ -42,7 +42,7 @@ export default function NewMessagePage() {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-[#f7f6fb]">
+    <div className="flex flex-col h-full bg-[#f7f6fb]">
       <header className="bg-[#534AB7] px-4 py-3 flex items-center justify-between">
         <button onClick={() => router.back()} className="text-white/80 text-[13px] bg-white/15 rounded-full px-3 py-1.5">
           ← חזרה

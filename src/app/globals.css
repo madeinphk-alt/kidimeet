@@ -11,12 +11,19 @@
 
 html {
   direction: rtl;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
   background-color: var(--bg-app);
   font-family: 'Rubik', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Custom scrollbar */

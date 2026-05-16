@@ -233,13 +233,12 @@ export default function ProfilePage() {
 
         {/* Share box */}
         <button
-          onClick={() => openWa('', 'היי, אני נעזר באפליקציה חדשה שעוזרת לי לקבוע יותר מפגשים לילדים שלי בחיים העמוסים האלה וחשבתי שאולי זה יעזור לכם גם. אז מוזמנים לנסות. https://kidimeet.vercel.app/')}
-          className="w-full bg-white border border-[#e0ddf0] rounded-xl px-5 py-4 text-center active:opacity-70 mt-2"
+          onClick={() => openWa('', 'היי, לאחרונה גילינו אפליקציה חדשה שעוזרת לנו במשפחה לקבוע יותר מפגשים לילדים בחיים העמוסים האלה. חשבנו אולי זה יעזור לכם גם אז מוזמנים לנסות. https://kidimeet.vercel.app/\nאגב זה פיתוח פרדסחנאי. תהנו')}
+          className="w-full bg-[#f0fdf4] border border-[#bbf7d0] rounded-xl px-5 py-4 text-center active:opacity-70 mt-2"
           dir="rtl"
         >
-          <p className="text-[13px] text-gray-700 leading-relaxed">
-            אם אהבתם מוזמנים להעביר לעוד חברים מפרדס חנה בלבד כרגע כי רק עליהם אנחנו סומכים בינתיים 😊{' '}
-            <span className="font-semibold text-[#534AB7] underline">לחצו כאן</span>
+          <p className="text-[13px] text-green-800 leading-relaxed">
+            אם אהבתם מוזמנים להעביר לעוד חברים מפרדס חנה בלבד כרגע כי רק עליהם אנחנו סומכים בינתיים 😊
           </p>
         </button>
 

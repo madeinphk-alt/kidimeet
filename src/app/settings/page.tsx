@@ -230,6 +230,21 @@ export default function ProfilePage() {
           </button>
         </div>
 
+        {/* Feedback box */}
+        <button
+          onClick={() => {
+            const msg = encodeURIComponent('היי, אני נעזר בקידימיט ואשמח לתת לכם פידבוק');
+            window.open(`https://wa.me/972546545850?text=${msg}`, '_blank');
+          }}
+          className="w-full bg-[#EEEDFE] border border-[#c0bce0] rounded-xl px-5 py-4 text-center active:opacity-70 mt-2"
+          dir="rtl"
+        >
+          <p className="text-[13px] text-[#534AB7] leading-relaxed">
+            אהבתם את מה שיצרנו? ממש נשמח לקבל מכם פידבק כדי לשפר.{' '}
+            <span className="font-semibold underline">פשוט לחצו כאן</span>
+          </p>
+        </button>
+
       </main>
 
       <BottomNav active="settings" />

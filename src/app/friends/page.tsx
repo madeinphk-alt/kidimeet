@@ -209,6 +209,9 @@ export default function FriendsPage() {
         >
           + הוסף חבר.ה
         </Link>
+        <p className="text-center text-[10px] text-gray-400 mt-1.5" dir="rtl">
+          הפרטים שלכם נשמרים רק אצלכם ולא עוברים לאף גורם אחר
+        </p>
       </div>
       <BottomNav active="friends" />
     </div>

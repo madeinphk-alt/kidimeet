@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { Analytics } from '@vercel/analytics/next';
 import WaChooser from '@/components/WaChooser';
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="h-full max-w-md mx-auto">
           {children}
           <WaChooser />
+          <Analytics />
         </div>
       </body>
     </html>

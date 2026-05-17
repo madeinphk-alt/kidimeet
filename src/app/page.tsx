@@ -294,11 +294,11 @@ export default function LuzPage() {
           </Link>
         )}
         {upcoming.length === 0 && friends.length > 0 && (
-          <Link href="/meetups" className="block bg-[#534AB7] rounded-xl px-5 py-5 text-center active:opacity-80 mb-4" dir="rtl">
-            <p className="text-white text-[15px] font-semibold leading-relaxed">
-              אין לכם מפגשים עתידיים מתוכננים<br />כנסו למפגשים ותקבעו עם חברים פנויים<br />בימים שמתאימים לכם בדיוק
+          <Link href="/meetups" className="block bg-[#f0fdf4] border border-[#bbf7d0] rounded-xl px-5 py-5 text-center active:opacity-80 mb-4" dir="rtl">
+            <p className="text-green-900 text-[15px] font-semibold leading-relaxed">
+              אם לילד שלכם יש פרופיל וגם כמה חברים זמינים<br />לחצו על מפגשים והתאימו להם מפגש מתאים<br />ללוז הפנויות וכולם שמחים
             </p>
-            <p className="text-white/60 text-[12px] mt-2">לחץ לעמוד המפגשים ←</p>
+            <p className="text-green-700/70 text-[12px] mt-2">לחצו לקביעת מפגש חברי ←</p>
           </Link>
         )}
         {upcoming.length > 0 && (

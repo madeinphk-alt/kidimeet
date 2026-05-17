@@ -147,13 +147,18 @@ export default function ProfilePage() {
             })}
 
             {/* Add child */}
-            <button
-              onClick={() => router.push('/children/add')}
-              className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-dashed border-gray-300 text-[14px] text-gray-500 bg-white"
-            >
-              <span className="text-[#534AB7] font-bold text-lg">+</span>
-              הוסף ילד
-            </button>
+            <div className="flex flex-col items-center gap-1">
+              <button
+                onClick={() => router.push('/children/add')}
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-dashed border-gray-300 text-[14px] text-gray-500 bg-white"
+              >
+                <span className="text-[#534AB7] font-bold text-lg">+</span>
+                הוסף ילד
+              </button>
+              <p className="text-[10px] text-gray-400 text-center" dir="rtl">
+                הפרטים שלכם נשמרים רק אצלכם ולא עוברים לאף גורם אחר*
+              </p>
+            </div>
           </div>
         </div>
 

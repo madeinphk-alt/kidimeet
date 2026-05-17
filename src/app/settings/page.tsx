@@ -147,10 +147,10 @@ export default function ProfilePage() {
             })}
 
             {/* Add child */}
-            <div className="flex flex-col items-center gap-1">
+            <div className="flex flex-col gap-1">
               <button
                 onClick={() => router.push('/children/add')}
-                className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-dashed border-gray-300 text-[14px] text-gray-500 bg-white"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-dashed border-gray-300 text-[14px] text-gray-500 bg-white"
               >
                 <span className="text-[#534AB7] font-bold text-lg">+</span>
                 הוסף ילד.ה

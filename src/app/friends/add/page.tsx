@@ -215,7 +215,8 @@ function AddFriendForm() {
         {step === 0 && (
           <div>
             <h2 className="text-[17px] font-medium text-gray-800 mb-1">שם הילד</h2>
-            <p className="text-[13px] text-gray-400 mb-5">שם מלא או כינוי + מאיפה מכירים</p>
+            <p className="text-[13px] text-gray-400 mb-1">שם מלא או כינוי + מאיפה מכירים</p>
+            <p className="text-[11px] text-gray-400 mb-5">*הפרטים שלכם נשמרים רק אצלכם ולא עוברים לאף גורם אחר</p>
 
             <label className="block text-[12px] font-medium text-gray-500 mb-1.5">שם הילד</label>
             <div className="flex gap-2 mb-5 w-full max-w-sm mx-auto">

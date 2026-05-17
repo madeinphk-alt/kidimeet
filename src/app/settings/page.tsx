@@ -153,7 +153,7 @@ export default function ProfilePage() {
                 className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-dashed border-gray-300 text-[14px] text-gray-500 bg-white"
               >
                 <span className="text-[#534AB7] font-bold text-lg">+</span>
-                הוסף ילד
+                הוסף ילד.ה
               </button>
               <p className="text-[10px] text-gray-400 text-center" dir="rtl">
                 הפרטים שלכם נשמרים רק אצלכם ולא עוברים לאף גורם אחר*
